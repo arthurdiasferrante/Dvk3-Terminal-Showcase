@@ -1,0 +1,24 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+.rar
+target/
+.gradle/
+build/ 
+.DS_Store
+Thumbs.db
+hs_err_pid

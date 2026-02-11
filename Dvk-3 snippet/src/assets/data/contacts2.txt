@@ -1,0 +1,8 @@
+CONTACT INFO:
+--------------------------
+Name:     Thiago Tomaz
+Github:   github.com/sysqall
+Email:    thilima1223@gmail.com
+Linkedin: linkedin.com/in/thiago-tomaz-4769322a8/
+--------------------------
+Open to work: Java, Spring Boot, Backend, Legacy Systems, Cybersecurity.
