@@ -24,4 +24,6 @@ public class Dvk3Config {
     public static final int TIME_LONG_PROCESS = 300;
     public static final int TIME_INFINITE = -1;
 
+    // historico de comandos
+    public static final int MAX_HISTORY_COMMANDS = 6;
 }

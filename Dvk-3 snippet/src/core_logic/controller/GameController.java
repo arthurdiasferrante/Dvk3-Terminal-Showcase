@@ -13,6 +13,7 @@ import core_logic.views.TerminalViewer;
 import core_logic.models.system.Dvk3System;
 
 import java.io.IOException;
+import java.security.Key;
 
 public class GameController {
     private long lastTickAnimation = System.currentTimeMillis();
@@ -23,6 +24,8 @@ public class GameController {
     private TerminalViewer viewer;
     private DocumentWindowViewer docWindowView;
     private BunkerState bunkerState;
+    private String historyCommand;
+    private int commandIndex = 0;
 
     public GameController(Screen screen) {
         this.screen = screen;
@@ -51,13 +54,11 @@ public class GameController {
 
         try {
             while (true) {
-                // Removido verificação de Meltdown e ForcedHalt (Hardware Panic)
 
                 screen.clear();
 
                 if (!dvk3System.isOn()) {
-                    // Se estiver desligado, fica tela preta esperando ESC para ligar
-                    // Pode desenhar algo aqui se quiser, ou deixar preto
+                    // Tela preta quando desligado
                 } else {
                     viewer.draw(bunkerState, dvk3System, dvk3Core, docWindowView, animTick);
                 }
@@ -96,7 +97,6 @@ public class GameController {
     public void processKey() throws Exception {
         KeyStroke key = screen.pollInput();
 
-        // Se estiver em StandBy (animação inicial), qualquer tecla acorda
         if (key != null){
             if (dvk3Core.getStandBy()) {
                 dvk3Core.setStandBy(false);
@@ -104,7 +104,7 @@ public class GameController {
             }
         }
 
-        // Se o logger estiver escrevendo, ignora input (efeito máquina de escrever)
+        // Se o logger estiver escrevendo, ignora input
         if (dvk3System.getLogger().isBusy()) {
             return;
         }
@@ -114,13 +114,12 @@ public class GameController {
 
             // Lógica do ESC (Ligar/Desligar/Sair do Documento)
             if (key.getKeyType() == KeyType.Escape) {
-                // Se estiver lendo documento, sai dele
+                // Se estiver a ler documento, sai dele
                 if (dvk3System.getDocReader().isOpen()) {
                     dvk3System.getDocReader().setOpen(false);
                     dvk3System.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
                     return;
                 }
-                // Se estiver desligado, liga (com boot)
                 if (!dvk3System.isOn()) {
                     BootSequence boot = new BootSequence(screen);
                     boot.execute();
@@ -129,8 +128,6 @@ public class GameController {
                     resetTimers();
                     return;
                 }
-
-                // else { dvk3Core.turnOff(dvk3System); }
             }
 
             if (!dvk3System.isOn()) {
@@ -139,7 +136,6 @@ public class GameController {
 
             // --- LÓGICA DE CONTROLE DO LEITOR DE DOCUMENTOS (READ) ---
             if (dvk3System.getDocReader().isOpen()) {
-                // Seta Esquerda (Diminuir Frequência ou Voltar Página)
                 if (key.getKeyType() == KeyType.ArrowLeft) {
                     dvk3System.getDocReader().returnPage();
                 }
@@ -148,6 +144,39 @@ public class GameController {
                     dvk3System.getDocReader().nextPage();
                 }
             }
+
+            // -- ACESSANDO HISTÓRICO DE MENSAGENS DO TERMINAL --
+            int historySize = dvk3System.getCommandHistoryMessageSize();
+            if (key.getKeyType() == KeyType.ArrowUp) {
+                if (commandIndex > 0) {
+                    commandIndex--;
+                } else if (commandIndex <= 0) {
+                    commandIndex = historySize;
+                }
+                dvk3System.inputBuffer.setLength(0);
+                historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
+                if (commandIndex == historySize) {
+
+                } else {
+                    dvk3System.inputBuffer.append(commandIndex + historyCommand);
+                }
+            } else if (key.getKeyType() == KeyType.ArrowDown) {
+                if (commandIndex < historySize) {
+                    commandIndex++;
+                } else if (commandIndex > MAX_HISTORY_COMMANDS) {
+                    commandIndex = 0;
+                }
+                dvk3System.inputBuffer.setLength(0);
+                if (commandIndex == historySize) {
+                    // nada
+                } else {
+                    historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
+                    dvk3System.inputBuffer.append(commandIndex + historyCommand);
+                }
+            } else {
+                commandIndex = historySize;
+            }
+
 
             // Se o documento estiver aberto, ignora digitação no terminal
             if (dvk3System.getDocReader().isOpen()) {
@@ -164,7 +193,6 @@ public class GameController {
                 }
 
                 char c = key.getCharacter();
-                // Apenas caracteres imprimíveis ASCII
                 if (c >= 32 && c < 127) {
                     if (!Character.isISOControl(c)) {
                         if (dvk3System.inputBuffer.length() < 50) {
@@ -180,12 +208,9 @@ public class GameController {
             }
             else if (key.getKeyType() == KeyType.Enter) {
                 String finalCommand = dvk3System.inputBuffer.toString();
-                // Loga o comando do usuário na tela
                 dvk3System.getLogger().userLog(finalCommand, dvk3System.getFormattedHour());
                 Thread.sleep(50);
-                // Manda executar
                 processComands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
-                // Limpa o buffer para o próximo comando
                 dvk3System.inputBuffer.setLength(0);
             }
         }

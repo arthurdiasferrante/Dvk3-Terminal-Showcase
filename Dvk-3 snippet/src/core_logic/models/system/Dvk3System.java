@@ -4,7 +4,11 @@ import core_logic.models.utils.CryptoUtils;
 import core_logic.models.filesystem.Dvk3FileManager;
 import core_logic.models.physical.Dvk3Core;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import static core_logic.models.rules.Dvk3Config.*;
 
 public class Dvk3System {
     // Gerenciadores Essenciais
@@ -20,15 +24,15 @@ public class Dvk3System {
     // Buffer de Digitação
     public StringBuilder inputBuffer = new StringBuilder();
 
+    // Histórico de Mensagens
+    private List<String> commandHistory = new ArrayList<>();
+
     // Estado Básico do Sistema
     private boolean isOn = true;
     private long lastTypingTime = 0;
     private int tick = 0;
 
 
-    public Dvk3System() {
-        // Construtor limpo, sem dependência de BunkerState
-    }
 
     public void notifyTyping() {
         lastTypingTime = System.currentTimeMillis();
@@ -78,6 +82,29 @@ public class Dvk3System {
         return String.format("%02d:%02d", hours, mins);
     }
 
+    public void addCommandToHistory(String validCommand) {
+        if (commandHistory.contains(validCommand)) {
+            commandHistory.remove(validCommand);
+        }
+
+        if (commandHistory.size() >= MAX_HISTORY_COMMANDS) {
+            commandHistory.remove(0);
+        }
+        commandHistory.add(validCommand);
+    }
+
+    public int getCommandHistoryMessageSize() {
+        return commandHistory.size();
+    }
+
+    public String getCommandHistoryMessage(int index) {
+        if (index < 0 || index >= commandHistory.size()) {
+            return "";
+        }
+
+        return commandHistory.get(index);
+    }
+
     public CryptoUtils getCryptoUtils() {
         return cryptoUtils;
     }
@@ -106,4 +133,6 @@ public class Dvk3System {
         // Heating delay é sempre 0 nesta versão
         return 0;
     }
+
+
 }

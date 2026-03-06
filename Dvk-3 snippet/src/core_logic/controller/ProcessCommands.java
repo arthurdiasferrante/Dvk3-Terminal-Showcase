@@ -14,11 +14,14 @@ public class ProcessCommands {
     public void executeCommand(String rawCommand, Dvk3System system, Dvk3Core core, BunkerState state) {
         String cleanCommand = rawCommand.trim().toUpperCase();
 
+        system.addCommandToHistory(cleanCommand);
+
         String[] parts = cleanCommand.split("\\s+");
         if (parts.length == 0) {
             return;
         }
         String mainCommand = parts[0];
+
 
         switch (mainCommand) {
             case "HELP":
