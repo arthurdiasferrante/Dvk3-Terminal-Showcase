@@ -150,33 +150,31 @@ public class GameController {
             if (key.getKeyType() == KeyType.ArrowUp) {
                 if (commandIndex > 0) {
                     commandIndex--;
-                } else if (commandIndex <= 0) {
+                } else {
                     commandIndex = historySize;
                 }
                 dvk3System.inputBuffer.setLength(0);
-                historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                if (commandIndex == historySize) {
-
-                } else {
-                    dvk3System.inputBuffer.append(commandIndex + historyCommand);
+                if (commandIndex != historySize) {
+                    String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
+                    dvk3System.inputBuffer.append(historyCommand);
                 }
             } else if (key.getKeyType() == KeyType.ArrowDown) {
                 if (commandIndex < historySize) {
                     commandIndex++;
-                } else if (commandIndex > MAX_HISTORY_COMMANDS) {
+                } else {
                     commandIndex = 0;
                 }
+
                 dvk3System.inputBuffer.setLength(0);
-                if (commandIndex == historySize) {
-                    // nada
-                } else {
-                    historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                    dvk3System.inputBuffer.append(commandIndex + historyCommand);
+
+                if (commandIndex != historySize) {
+                    String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
+                    dvk3System.inputBuffer.append(historyCommand);
                 }
+
             } else {
                 commandIndex = historySize;
             }
-
 
             // Se o documento estiver aberto, ignora digitação no terminal
             if (dvk3System.getDocReader().isOpen()) {
@@ -209,6 +207,8 @@ public class GameController {
             else if (key.getKeyType() == KeyType.Enter) {
                 String finalCommand = dvk3System.inputBuffer.toString();
                 dvk3System.getLogger().userLog(finalCommand, dvk3System.getFormattedHour());
+                dvk3System.addCommandToHistory(finalCommand);
+                commandIndex = dvk3System.getCommandHistoryMessageSize();
                 Thread.sleep(50);
                 processComands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
                 dvk3System.inputBuffer.setLength(0);
