@@ -18,7 +18,7 @@ out/
 .rar
 target/
 .gradle/
-build/ 
+build/
 .DS_Store
 Thumbs.db
 hs_err_pid

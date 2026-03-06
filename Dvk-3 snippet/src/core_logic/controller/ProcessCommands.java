@@ -103,7 +103,6 @@ public class ProcessCommands {
                 } else if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
-                    system.getLogger().sysLog(SUCCESS, "ENTRANDO AI", LOG_FAST);
                     system.getDocReader().chitatMethod(system, system.getFileManager(), parts[1]);
                 }
                 break;
