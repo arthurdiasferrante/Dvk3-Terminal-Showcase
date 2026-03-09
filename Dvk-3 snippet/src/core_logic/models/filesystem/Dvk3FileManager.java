@@ -51,7 +51,6 @@ public class Dvk3FileManager {
     public void initializeSystem() {
         String readmeContent = loadTextResource("readme.txt");
         String contactContent = loadTextResource("contacts.txt");
-        String contactContent2 = loadTextResource("contacts2.txt");
         String projectsContent = loadTextResource("projects.txt");
         String secretLore = loadTextResource("secret.txt");
 
@@ -66,7 +65,6 @@ public class Dvk3FileManager {
         // 3. HOME (/HOME)
         VirtualFolder homeFolder = new VirtualFolder(STANDART, "HOME", true, rootFolder);
         new VirtualFile(TEXT, "CONTACT1.TXT", homeFolder, contactContent);
-        new VirtualFile(TEXT, "CONTACT2.TXT", homeFolder, contactContent2);
         new VirtualFile(TEXT, "PROJECTS.TXT", homeFolder, projectsContent);
 
         //

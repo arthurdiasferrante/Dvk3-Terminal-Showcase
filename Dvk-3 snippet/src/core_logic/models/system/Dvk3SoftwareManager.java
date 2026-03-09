@@ -48,7 +48,9 @@ public class Dvk3SoftwareManager {
                     int frequency = Integer.parseInt(pendingAction.split(" ")[2]);
                     system.getCryptoUtils().safeDecryptor(system, file, frequency);
                     break;
-                case "CHITAT":
+                case "CAT":
+                case "READ":
+                case "OPEN":
                     Dvk3TaskManager.Task docVisualizerTask = new Dvk3TaskManager.Task("CHITAT_PROTOKOL", TIME_INFINITE);
                     system.getTaskManager().addTask(docVisualizerTask);
                     system.getDocReader().chitatMethod(system, system.getFileManager(), file);

@@ -21,7 +21,6 @@ public class ProcessCommands {
         }
         String mainCommand = parts[0];
 
-        system.getLogger().sysLog(WARN, "last command: " + system.getLastCommand());
         if (system.isConfirmationMode()) {
             if (mainCommand.equals("Y")) {
                 cleanCommand = (system.getLastCommand()).toUpperCase() + " Y";
@@ -135,7 +134,6 @@ public class ProcessCommands {
                 } else if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
-//                    system.getDocReader().chitatMethod(system, system.getFileManager(), parts[1]);
                     system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, LOG_NORMAL);
                 }
                 break;
