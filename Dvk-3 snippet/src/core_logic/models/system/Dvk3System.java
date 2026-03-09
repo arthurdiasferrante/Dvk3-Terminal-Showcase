@@ -25,7 +25,7 @@ public class Dvk3System {
 
     // Histórico de Mensagens
     private List<String> commandHistory = new ArrayList<>();
-    private String lastCommand;
+    private String lastCommand = " ";
 
     // Estado Básico do Sistema
     private boolean confirmationMode = false;
