@@ -3,6 +3,7 @@ Version: 1.0.4 (Stable)
 Kernel: DVK-Core v3.1
 
 This is a technical demonstration of a terminal simulator built entirely in Java.
+
 SYSTEM NOTE: This environment is a creative reinterpretation inspired by the 
 historical Soviet DVK-3. It is not a 1:1 hardware or software emulation.
 
