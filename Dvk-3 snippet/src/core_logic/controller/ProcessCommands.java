@@ -38,7 +38,7 @@ public class ProcessCommands {
                 system.getLogger().callClearLog(LOG_NORMAL);
                 break;
 
-            case "SHUTDOWN": // Antigo HALT, agora só desliga
+            case "SHUTDOWN": // Antigo HALT,
                 system.getLogger().sysLog(INFO, "TERMINATING SESSION...", LOG_INSTANT);
                 core.turnOff(system); // Desliga direto
                 break;
@@ -48,16 +48,16 @@ public class ProcessCommands {
             case "DECRYPT":
             case "FIX":
                 if (parts.length < 3) { // STABILIZE ARQUIVO FREQUENCIA
-                    system.getLogger().sysLog(ERROR, getError(7), LOG_FAST); // Syntax Error
+                    system.getLogger().sysLog(ERROR, getError(7), LOG_FAST); // Syntax Error 7
                 } else if (parts.length > 3) {
-                    system.getLogger().sysLog(ERROR, getError(9), LOG_FAST); // Invalid Args
+                    system.getLogger().sysLog(ERROR, getError(9), LOG_FAST); // Invalid Args 9
                 } else {
                     system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
                 }
                 break;
 
 
-            case "CHECK": // Checar frequência (útil pro stabilize)
+            case "CHECK":
                 if (parts.length > 1) {
                     system.getFileManager().getFrequency(parts[1], system);
                 } else {
@@ -108,7 +108,7 @@ public class ProcessCommands {
                 }
                 break;
             default:
-                // Tenta executar arquivo direto pelo nome (ex: README.TXT)
+                // Tenta executar arquivo direto pelo nome (ex: NOTES.TXT ou apenas NOTES)
                 VirtualFile executableFile = system.getFileManager().checkExecutableFiles(mainCommand, system);
 
                 if (executableFile != null) {

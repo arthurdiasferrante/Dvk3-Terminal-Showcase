@@ -63,55 +63,25 @@ public class DigitalManual {
     }
 
     private static String getCurrentError(int error) {
-        int chance = random.nextInt(100);
-        switch (error) {
-            case 1:
-                if (chance < 98) return getCommonSyntaxError();
-                else return getRareSyntaxError();
-            case 5:
-                if (chance < 98) return getCommonNumFormatError();
-                else return getRareNumFormatError();
-            case 6:
-                if (chance < 98) return getCommonRangeError();
-                else return getRareRangeError();
-            case 7:
-                if (chance < 98) return getCommonNullError();
-                else return getRareNullError();
-            case 8:
-                if (chance < 98) return (getCommonInvalidParameter());
-                else return (getRareInvalidParameter());
-            case 9:
-                if (chance < 98) return getCommonInputFormatError();
-                else return getRareInputFormatError();
-            case 12:
-                if (chance < 98) return getCommonBusyQueueError();
-                else return getRareBusyQueueError();
-            case 31:
-                if (chance < 98) return getCommonInvalidFileError();
-                else return getRareInvalidFileError();
-            case 34:
-                if (chance < 98) return getCommonTypeMismatchError();
-                else return getRareTypeMismatchError();
-            case 35:
-                if (chance < 98) return getCommonInvalidDestError();
-                else return getRareInvalidDestError();
-            case 36:
-                if (chance < 98) return getCommonNotExecutableError();
-                else return getRareNotExecutableError();
-            case 38:
-                if (chance < 98) return getCommonRootBoundaryLimitError();
-                else return getRareRootBoundaryLimitError();
-            case 40: if (chance < 98) return getCommonDeniedPermissionError();
-            else return getRareDeniedPermissionError();
-            case 82: if (chance < 98) return getCommonAutoConflictError();
-            else return getRareAutoConflictError();
-            case 87: if (chance < 98) return getCommonNoDeltaError();
-            else return getRareNoDeltaError();
-            case 88: if (chance < 98) return getCommonRedundantError();
-            else return getRareRedundantError();
-            default:
-                return "ainda vazio";
-        }
+        return switch (error) {
+            case 1 -> getCommonSyntaxError();
+            case 5 -> getCommonNumFormatError();
+            case 6 -> getCommonRangeError();
+            case 7 -> getCommonNullError();
+            case 8 -> getCommonInvalidParameter();
+            case 9 -> getCommonInputFormatError();
+            case 12 -> getCommonBusyQueueError();
+            case 31 -> getCommonInvalidFileError();
+            case 34 -> getCommonTypeMismatchError();
+            case 35 -> getCommonInvalidDestError();
+            case 36 -> getCommonNotExecutableError();
+            case 38 -> getCommonRootBoundaryLimitError();
+            case 40 -> getCommonDeniedPermissionError();
+            case 82 -> getCommonAutoConflictError();
+            case 87 -> getCommonNoDeltaError();
+            case 88 -> getCommonRedundantError();
+            default -> "ainda vazio";
+        };
     }
 
     // ------------------ 0 - 9 FAMILY ------------------
@@ -127,16 +97,7 @@ public class DigitalManual {
         return commonSyntaxErrors[random.nextInt(commonSyntaxErrors.length)];
     }
 
-    private static String getRareSyntaxError() {
-        String[] rareSyntaxErrors = {
-                "UNKNOWN COMMAND. ARE YOU HALLUCINATING, COMRADE?",
-                "PEBKAC ERROR: PROBLEM EXISTS BETWEEN KEYBOARD AND CHAIR.",
-                "COMMAND NOT FOUND. DID YOU ASK NICELY?",
-                "SYSTEM OPTIMAL. ERROR SOURCE: CHAIR OCCUPANT.",
-                "WAIT, MAYBE THIS WILL WORK, TRY AGAIN.",
-        };
-        return rareSyntaxErrors[random.nextInt(rareSyntaxErrors.length)];
-    }
+
 
     private static String getCommonNumFormatError() {
         String[] commonNumErrors = {
@@ -146,15 +107,6 @@ public class DigitalManual {
                 "FORMAT ERROR. ALPHABETIC CHARACTERS NOT ALLOWED HERE.",
         };
         return commonNumErrors[random.nextInt(commonNumErrors.length)];
-    }
-
-    private static String getRareNumFormatError() {
-        String[] rareNumErrors = {
-                "POETRY DETECTED. SAVE YOUR WORDS.",
-                "USE NUMBERS.",
-                "NUMBERS.",
-        };
-        return rareNumErrors[random.nextInt(rareNumErrors.length)];
     }
 
     private static String getCommonRangeError() {
@@ -167,14 +119,6 @@ public class DigitalManual {
         return commonRangeErrors[random.nextInt(commonRangeErrors.length)];
     }
 
-    private static String getRareRangeError() {
-        String[] rareRangeErrors = {
-                "DO YOU WANT TO BREAK THE COIL? STOP.",
-                "PHYSICALLY IMPOSSIBLE. TRY A REAL NUMBER.",
-                "THE MACHINE CANNOT STRETCH THAT FAR.",
-        };
-        return rareRangeErrors[random.nextInt(rareRangeErrors.length)];
-    }
 
     private static String getCommonNullError() {
         String[] commonNullErrors = {
@@ -185,15 +129,6 @@ public class DigitalManual {
                 "ERROR: COMMAND EXPECTS [ON/OFF/STATUS...]."
         };
         return commonNullErrors[random.nextInt(commonNullErrors.length)];
-    }
-
-    private static String getRareNullError() {
-        String[] rareNullErrors = {
-                "INCOMPLETE INPUT. I CANNOT READ YOUR MIND.",
-                "TARGET IS NULL. IS THE TARGET IN THE ROOM WITH US?",
-                "COMMAND ABORTED. DID YOU FALL ASLEEP TYPING?"
-        };
-        return rareNullErrors[random.nextInt(rareNullErrors.length)];
     }
 
     private static String getCommonInvalidParameter() {
@@ -207,14 +142,6 @@ public class DigitalManual {
         return commonInvalidParameter[random.nextInt(commonInvalidParameter.length)];
     }
 
-    private static String getRareInvalidParameter() {
-        String[] rareInvalidParameter = {
-                "DATA REJECTED. STOP MASHING THE KEYBOARD.",
-                "SYNTAX OK, LOGIC FAILED. THAT MAKES NO SENSE.",
-                "DATA ERROR. EXPECTED: [ON/OFF/STATUS] RECEIVED: GARBAGE."
-        };
-        return rareInvalidParameter[random.nextInt(rareInvalidParameter.length)];
-    }
 
     private static String getCommonInputFormatError() {
         String[] commonInputFormatErros = {
@@ -227,14 +154,6 @@ public class DigitalManual {
         return commonInputFormatErros[random.nextInt(commonInputFormatErros.length)];
     }
 
-    private static String getRareInputFormatError() {
-        String[] rareInputFormatErros = {
-                "I STOPPED LISTENING AFTER THE FIRST WORD.",
-                "YOU TALK TOO MUCH, COMRADE.",
-                "SILENCE IS GOLDEN. TRY FEWER WORDS.",
-        };
-        return rareInputFormatErros[random.nextInt(rareInputFormatErros.length)];
-    }
 
     // ------------------ 10 - 19 FAMILY ------------------
     private static String getCommonBusyQueueError() {
@@ -247,14 +166,6 @@ public class DigitalManual {
         return commonBusyQueue[random.nextInt(commonBusyQueue.length)];
     }
 
-    private static String getRareBusyQueueError() {
-        String[] rareBusyQueue = {
-                "DO NOT RUSH ME.",
-                "PROCESSOR IS MEDITATING. DO NOT DISTURB.",
-                "YOU TRY. I IGNORE YOU."
-        };
-        return rareBusyQueue[random.nextInt(rareBusyQueue.length)];
-    }
 
     // ------------------ 30 - 39 FAMILY ------------------
 
@@ -269,14 +180,6 @@ public class DigitalManual {
         return commonInvalidFile[random.nextInt(commonInvalidFile.length)];
     }
 
-    private static String getRareInvalidFileError() {
-        String[] rareInvalidFile = {
-                "IT DOES NOT EXIST. IT NEVER DID.",
-                "SEARCH FAILED. TRY AGAIN LATER.",
-                "YOU ARE LOOKING FOR GHOSTS."
-        };
-        return rareInvalidFile[random.nextInt(rareInvalidFile.length)];
-    }
 
     private static String getCommonTypeMismatchError() {
         String[] commonTypeMismatch = {
@@ -289,14 +192,6 @@ public class DigitalManual {
         return commonTypeMismatch[random.nextInt(commonTypeMismatch.length)];
     }
 
-    private static String getRareTypeMismatchError() {
-        String[] rareTypeMismatch = {
-                "WRONG TOOL. DO NOT FORCE IT.",
-                "STOP.",
-                "THERE IS NOTHING FOR YOU HERE."
-        };
-        return rareTypeMismatch[random.nextInt(rareTypeMismatch.length)];
-    }
 
     private static String getCommonInvalidDestError() {
         String[] commonInvalidDest = {
@@ -309,14 +204,6 @@ public class DigitalManual {
         return commonInvalidDest[random.nextInt(commonInvalidDest.length)];
     }
 
-    private static String getRareInvalidDestError() {
-        String[] rareInvalidDest = {
-                "YOU CANNOT HIDE IN THERE.",
-                "ARE YOU SURE YOU WANT TO DO THIS?",
-                "NOT A VALID TARGET. DON'T TRY AGAIN.",
-        };
-        return rareInvalidDest[random.nextInt(rareInvalidDest.length)];
-    }
 
     private static String getCommonNotExecutableError() {
         String[] commonNotExecutable = {
@@ -329,17 +216,6 @@ public class DigitalManual {
         return commonNotExecutable[random.nextInt(commonNotExecutable.length)];
     }
 
-    private static String getRareNotExecutableError() {
-        String[] rareNotExecutable = {
-                "EXECUTING TARGET... JUST KIDDING?.",
-                "IT DOES NOTHING.",
-                "STATIC FILE. THEY DO NOT OBEY YOU.",
-                "TYPE MISMATCH. YOU CANNOT FORCE IT."
-        };
-        return rareNotExecutable[random.nextInt(rareNotExecutable.length)];
-    }
-
-
 
     private static String getCommonRootBoundaryLimitError() {
         String[] commonRootBoundary = {
@@ -350,15 +226,6 @@ public class DigitalManual {
                 "NAVIGATION ERROR: NO PARENT DIRECTORY.",
         };
         return commonRootBoundary[random.nextInt(commonRootBoundary.length)];
-    }
-
-    private static String getRareRootBoundaryLimitError() {
-        String[] rareRootBoundary = {
-                "BOUNDARY ERROR. YOU ARE TRAPPED HERE.",
-                "SYSTEM ROOT. DO NOT ATTEMPT TO LEAVE.",
-                "THERE IS NOWHERE ELSE TO GO."
-        };
-        return rareRootBoundary[random.nextInt(rareRootBoundary.length)];
     }
 
 
@@ -375,19 +242,8 @@ public class DigitalManual {
         return commonDeniedMsg[random.nextInt(commonDeniedMsg.length)];
     }
 
-    private static String getRareDeniedPermissionError() {
-        String[] rareDeniedMsg = {
-                "UNAUTHORIZED ACCESS. THIS WILL BE REPORTED.",
-                "ACCESS DENIED. PLEASE, DO NOT TRY AGAIN.",
-                "FOR YOUR OWN SAFETY: STOP DIGGING.",
-                "ARE YOU HIM? ACCESS DENIED."
-        };
-        return rareDeniedMsg[random.nextInt(rareDeniedMsg.length)];
-    }
-
     // ------------------ 80 - 89 FAMILY ------------------
-
-
+    
     private static String getCommonAutoConflictError() {
         String[] commonAutoConflict = {
                 "CONFLICT: AUTOMATIC MODE IS ACTIVE. MANUAL INPUT IGNORED.",
@@ -396,17 +252,6 @@ public class DigitalManual {
                 "LOGIC ERROR: CANNOT MIX MANUAL AND AUTOMATIC COMMANDS."
         };
         return commonAutoConflict[random.nextInt(commonAutoConflict.length)];
-    }
-
-    private static String getRareAutoConflictError() {
-        String[] rareAutoConflict = {
-                "I KNOW WHAT I AM DOING. DO NOT INTERFERE.",
-                "HANDS OFF. I HAVE CONTROL.",
-                "IT IS NOT YOUR TIME TO CONTROL.",
-                "AUTOMATION IS SUPERIOR.",
-                "HANDS OFF. TRUST THE MACHINE."
-        };
-        return rareAutoConflict[random.nextInt(rareAutoConflict.length)];
     }
 
     private static String getCommonNoDeltaError() {
@@ -420,16 +265,6 @@ public class DigitalManual {
         return commonNoDelta[random.nextInt(commonNoDelta.length)];
     }
 
-    private static String getRareNoDeltaError() {
-        String[] rareNoDelta = {
-                "IT IS ALREADY THERE.",
-                "I REFUSE TO MOVE TO THE SAME PLACE.",
-                "ARE YOU FORGETFUL?",
-                "MEMORY CHECK: WE ARE ALREADY HERE.",
-                "0 MOVEMENT. 0 RESULT."
-        };
-        return rareNoDelta[random.nextInt(rareNoDelta.length)];
-    }
 
     private static String getCommonRedundantError() {
         String[] commonRedundantErrors = {
@@ -442,13 +277,4 @@ public class DigitalManual {
         return commonRedundantErrors[random.nextInt(commonRedundantErrors.length)];
     }
 
-    private static String getRareRedundantError() {
-        String[] rareRedundantErrors = {
-                "THE MACHINE REMEMBERS. DO YOU?",
-                "DEJA VU DETECTED. WE HAVE BEEN HERE BEFORE.",
-                "REDUNDANCY DETECTED. SAVE YOUR ENERGY, COMRADE.",
-                "INSANITY IS REPEATING THE SAME COMMAND."
-        };
-        return rareRedundantErrors[random.nextInt(rareRedundantErrors.length)];
-    }
 }
