@@ -9,6 +9,7 @@ import static core_logic.models.rules.Dvk3Config.*;
 import core_logic.models.physical.Dvk3Core;
 import core_logic.views.BootSequence;
 import core_logic.views.DocumentWindowViewer;
+import core_logic.views.SafeHaltScreen;
 import core_logic.views.TerminalViewer;
 import core_logic.models.system.Dvk3System;
 
@@ -57,8 +58,7 @@ public class GameController {
 
                 screen.clear();
 
-                if (!dvk3System.isOn()) {
-                } else {
+                if (dvk3System.isOn()) {
                     viewer.draw(bunkerState, dvk3System, dvk3Core, docWindowView, animTick);
                 }
 
@@ -117,6 +117,10 @@ public class GameController {
                 if (dvk3System.getDocReader().isOpen()) {
                     dvk3System.getDocReader().setOpen(false);
                     dvk3System.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
+                    return;
+                }
+                if (dvk3System.isSafeHalt()) {
+                    dvk3Core.turnOff(dvk3System);
                     return;
                 }
                 if (!dvk3System.isOn()) {

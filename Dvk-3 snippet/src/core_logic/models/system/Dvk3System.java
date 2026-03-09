@@ -30,6 +30,7 @@ public class Dvk3System {
     // Estado Básico do Sistema
     private boolean confirmationMode = false;
     private boolean isOn = true;
+    private boolean safeHaltScreen = false;
     private long lastTypingTime = 0;
     private int tick = 0;
 
@@ -50,14 +51,12 @@ public class Dvk3System {
         logger.processDisplayQueue(0); // 0 = Sem delay de aquecimento
     }
 
-    // Processa o ciclo básico
     public void processTick(Dvk3Core core) {
         this.tick++;
-        // Foi removido os diagnósticos e aquecimento, só atualiza o log visual
         logger.processDisplayQueue(0);
     }
 
-    // Reseta o sistema (usado ao reiniciar)
+    // Reseta o sistema
     public void killEverything(Dvk3Core core) {
         taskManager.killAllTasks();
         inputBuffer.setLength(0);
@@ -69,6 +68,7 @@ public class Dvk3System {
     // --- Getters e Setters Essenciais ---
 
     public void setIsOn(boolean bool) {
+        safeHaltScreen = false;
         isOn = bool;
     }
 
@@ -131,7 +131,7 @@ public class Dvk3System {
     }
 
     public int getHeatingDelay() {
-        // Heating delay é sempre 0 nesta versão
+        // Heating delay é sempre 0 nesta versão :p
         return 0;
     }
 
@@ -151,5 +151,13 @@ public class Dvk3System {
             lastCommand = commandHistory.getLast();
         }
         return lastCommand;
+    }
+
+    public boolean isSafeHalt() {
+        return safeHaltScreen;
+    }
+
+    public void triggerSafeHalt() {
+        this.safeHaltScreen = true;
     }
 }

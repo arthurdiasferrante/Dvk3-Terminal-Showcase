@@ -42,7 +42,6 @@ public class Dvk3TaskManager {
         return taskNames;
     }
 
-    // --- Inner Class Task Simplificada ---
 
     public static class Task {
         private String taskName;
@@ -57,9 +56,9 @@ public class Dvk3TaskManager {
             if (taskDuration > 0) {
                 taskDuration--;
             } else if (taskDuration == 0) {
-                return false; // Tarefa concluída
+                return false;
             }
-            return true; // Tarefa ainda rodando
+            return true;
         }
 
         public String getTaskName() {

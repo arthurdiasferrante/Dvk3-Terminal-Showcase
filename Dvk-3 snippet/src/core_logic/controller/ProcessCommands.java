@@ -59,8 +59,7 @@ public class ProcessCommands {
                 }
                 if (parts.length >= 2) {
                     if (parts[1].equals("Y")) {
-                        system.getLogger().sysLog(INFO, "TERMINATING SESSION...", LOG_INSTANT);
-                        system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, TIME_INFINITE);
+                        system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_STANDARD);
                     } else {
                         system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                     }
@@ -82,7 +81,7 @@ public class ProcessCommands {
                 } else if (parts.length > 3) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST); // Invalid Args 9
                 } else {
-                    system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, TIME_FAST);
+                    system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
                 }
                 break;
 
@@ -128,13 +127,13 @@ public class ProcessCommands {
 
             case "OPEN":
             case "READ":
-            case "CAT": // Ler arquivo
+            case "CAT":
                 if (parts.length == 1) {
                     system.getLogger().sysLog(ERROR, getError(7), LOG_FAST);
                 } else if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
-                    system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, LOG_NORMAL);
+                    system.getSoftwareManager().scheduleProtocol(system, cleanCommand, LOG_NORMAL);
                 }
                 break;
             default:

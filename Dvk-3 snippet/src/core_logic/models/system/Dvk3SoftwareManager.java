@@ -15,7 +15,7 @@ public class Dvk3SoftwareManager {
     private int executionTimer;
 
 
-    public void scheduleProtocol(Dvk3System system, Dvk3Core core, String command, int time) {
+    public void scheduleProtocol(Dvk3System system, String command, int time) {
 
         if (pendingAction != null) {
             system.getLogger().sysLog(ERROR, getError(12), LOG_FAST);
@@ -29,7 +29,7 @@ public class Dvk3SoftwareManager {
             protocolScheduled = chitatProtocol(system, command, time);
         }
         if (command.startsWith("SHUTDOWN")) {
-            core.turnOff(system);
+            protocolScheduled = safeShutdownProtocol(system, time);
         }
         if (protocolScheduled) {
             pendingAction = command;
@@ -54,6 +54,9 @@ public class Dvk3SoftwareManager {
                     Dvk3TaskManager.Task docVisualizerTask = new Dvk3TaskManager.Task("CHITAT_PROTOKOL", TIME_INFINITE);
                     system.getTaskManager().addTask(docVisualizerTask);
                     system.getDocReader().chitatMethod(system, system.getFileManager(), file);
+                    break;
+                case "SHUTDOWN":
+                    system.triggerSafeHalt();
                     break;
             }
             pendingAction = null;
@@ -80,8 +83,12 @@ public class Dvk3SoftwareManager {
     }
 
     private boolean safeShutdownProtocol(Dvk3System system, int time) {
-            return true;
-        }
+        system.getLogger().sysLog(INFO, "TERMINATING SESSION...", LOG_FAST);
+
+        system.getLogger().sysLog(SUCCESS, "PLEASE WAIT", LOG_SLOW);
+        this.executionTimer = time + system.getHeatingDelay();
+        return true;
+    }
 
     private boolean decryptorProtocol(Dvk3System system, String command, int time) {
 

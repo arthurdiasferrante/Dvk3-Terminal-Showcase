@@ -19,11 +19,13 @@ public class TerminalViewer {
     private Screen screen;
     private TextGraphics tGraphics;
     private Random random;
+    private SafeHaltScreen safeHaltScreen;
 
     public TerminalViewer(Screen screen) {
         this.screen = screen;
         this.tGraphics = screen.newTextGraphics();
         this.random = new Random();
+        this.safeHaltScreen = new SafeHaltScreen();
 
         if (screen instanceof TerminalScreen) {
             Terminal terminal = ((TerminalScreen) screen).getTerminal();
@@ -36,12 +38,18 @@ public class TerminalViewer {
 
     public void draw(BunkerState bunkerState, Dvk3System system, Dvk3Core core, DocumentWindowViewer docWindowView, long animTick) throws Exception {
 
+
+
         TerminalSize size = screen.doResizeIfNecessary();
         if (size == null) size = screen.getTerminalSize();
 
+        if (system.isSafeHalt()) {
+            safeHaltScreen.draw(screen, tGraphics, animTick, size);
+            return;
+        }
+
         screen.setCursorPosition(null);
         tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
-        // Cor padrão do sistema (âmbar/laranja) em vez de dinâmica
         tGraphics.setForegroundColor(new TextColor.RGB(255, 176, 0));
         tGraphics.fillRectangle(new com.googlecode.lanterna.TerminalPosition(0, 0), size, ' ');
 
@@ -72,8 +80,6 @@ public class TerminalViewer {
         tGraphics.putString(40, 1, "UID: SN-0373");
 
         // Removida temperatura pois core não processa mais isso na demo
-        // Se quiser manter texto estático:
-        // tGraphics.putString(size.getColumns() - 20, 1, "CORE: STABLE");
 
         // borda direita
         tGraphics.putString(size.getColumns() - 1, 1, "║");
