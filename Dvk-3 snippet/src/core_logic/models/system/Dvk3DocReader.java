@@ -25,15 +25,14 @@ public class Dvk3DocReader {
     // Chamado a cada frame: Atualiza o texto se for um arquivo criptografado (SAFE)
     public void processTick() {
         if (open && openedFile != null && systemRef != null) {
-            // Se o arquivo tiver a camada SAFE, o texto muda conforme a frequência ajustada
             if (openedFile.getEncryptionLayers().contains(CryptoUtils.EncryptionType.SAFE)) {
                 String dynamicContent = systemRef.getCryptoUtils().encryptContent(openedFile);
-                wordWrap(dynamicContent, 51); // 51 é a largura útil da janela
+                wordWrap(dynamicContent, 51);
             }
         }
     }
 
-    // Métoddo principal para abrir um arquivo (Chamado pelo comando READ)
+    // Métoddo principal para abrir um arquivo (Chamado pelo comando CAT)
     public void chitatMethod(Dvk3System system, Dvk3FileManager fileManager, String fileName) {
         this.systemRef = system;
         this.currentPage = 0;
@@ -57,19 +56,16 @@ public class Dvk3DocReader {
         StringBuilder currentLine = new StringBuilder();
 
         for (String word : words) {
-            // Verifica se a palavra cabe na linha atual (+1 para o espaço)
             if (currentLine.length() + word.length() + 1 <= maxWidth) {
                 if (currentLine.length() > 0) {
                     currentLine.append(" ");
                 }
                 currentLine.append(word);
             } else {
-                // Se não cabe, salva a linha e começa uma nova
                 formattedLines.add(currentLine.toString());
                 currentLine = new StringBuilder(word);
             }
         }
-        // Adiciona o resto do buffer
         if (currentLine.length() > 0) {
             formattedLines.add(currentLine.toString());
         }

@@ -243,7 +243,7 @@ public class DigitalManual {
     }
 
     // ------------------ 80 - 89 FAMILY ------------------
-    
+
     private static String getCommonAutoConflictError() {
         String[] commonAutoConflict = {
                 "CONFLICT: AUTOMATIC MODE IS ACTIVE. MANUAL INPUT IGNORED.",

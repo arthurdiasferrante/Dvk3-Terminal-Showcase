@@ -6,7 +6,6 @@ import core_logic.models.physical.Dvk3Core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static core_logic.models.rules.Dvk3Config.*;
 
@@ -26,8 +25,10 @@ public class Dvk3System {
 
     // Histórico de Mensagens
     private List<String> commandHistory = new ArrayList<>();
+    private String lastCommand;
 
     // Estado Básico do Sistema
+    private boolean confirmationMode = false;
     private boolean isOn = true;
     private long lastTypingTime = 0;
     private int tick = 0;
@@ -134,5 +135,21 @@ public class Dvk3System {
         return 0;
     }
 
+    public boolean isConfirmationMode() {
+        return confirmationMode;
+    }
 
+    public void enterConfirmationMode() {
+        this.confirmationMode = true;
+    }
+    public void leaveConfirmationMode() {
+        this.confirmationMode = false;
+    }
+
+    public String getLastCommand() {
+        if (!isConfirmationMode()) {
+            lastCommand = commandHistory.getLast();
+        }
+        return lastCommand;
+    }
 }

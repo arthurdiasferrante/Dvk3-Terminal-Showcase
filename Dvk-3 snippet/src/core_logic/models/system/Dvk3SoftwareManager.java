@@ -1,7 +1,9 @@
 package core_logic.models.system;
 
+import core_logic.models.rules.Dvk3Config;
 import core_logic.models.utils.CryptoUtils;
 import core_logic.models.filesystem.VirtualFile;
+import core_logic.models.physical.Dvk3Core;
 
 import static core_logic.models.rules.Dvk3Config.*;
 import static core_logic.models.system.Dvk3SystemLogger.LogType.*;
@@ -13,7 +15,7 @@ public class Dvk3SoftwareManager {
     private int executionTimer;
 
 
-    public void scheduleProtocol(Dvk3System system, String command, int time) {
+    public void scheduleProtocol(Dvk3System system, Dvk3Core core, String command, int time) {
 
         if (pendingAction != null) {
             system.getLogger().sysLog(ERROR, getError(12), LOG_FAST);
@@ -21,10 +23,13 @@ public class Dvk3SoftwareManager {
         }
         boolean protocolScheduled = false;
         if (command.startsWith("STABILIZE")) {
-            protocolScheduled = safeDecryptorProtocol(system, command, time);
+            protocolScheduled = decryptorProtocol(system, command, time);
         }
-        if (command.startsWith("CHITAT")) {
+        if (command.startsWith("READ") || command.startsWith("CAT") || command.startsWith("OPEN")) {
             protocolScheduled = chitatProtocol(system, command, time);
+        }
+        if (command.startsWith("SHUTDOWN")) {
+            core.turnOff(system);
         }
         if (protocolScheduled) {
             pendingAction = command;
@@ -72,9 +77,11 @@ public class Dvk3SoftwareManager {
         return true;
     }
 
+    private boolean safeShutdownProtocol(Dvk3System system, int time) {
+            return true;
+        }
 
-
-    private boolean safeDecryptorProtocol(Dvk3System system, String command, int time) {
+    private boolean decryptorProtocol(Dvk3System system, String command, int time) {
 
         String[] commandParts = command.split("\\s+");
         String fileString = commandParts[1];

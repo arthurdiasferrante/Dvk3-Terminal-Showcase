@@ -9,17 +9,32 @@ import core_logic.models.filesystem.VirtualFile;
 import core_logic.models.physical.Dvk3Core;
 import core_logic.models.system.Dvk3System;
 
+import java.io.BufferedReader;
+
 public class ProcessCommands {
 
     public void executeCommand(String rawCommand, Dvk3System system, Dvk3Core core, BunkerState state) {
         String cleanCommand = rawCommand.trim().toUpperCase();
-
         String[] parts = cleanCommand.split("\\s+");
         if (parts.length == 0) {
             return;
         }
         String mainCommand = parts[0];
 
+        system.getLogger().sysLog(WARN, "last command: " + system.getLastCommand());
+        if (system.isConfirmationMode()) {
+            if (mainCommand.equals("Y")) {
+                cleanCommand = (system.getLastCommand()).toUpperCase() + " Y";
+                parts = cleanCommand.split("\\s+");
+                mainCommand = parts[0];
+                system.leaveConfirmationMode();
+            } else if (mainCommand.equals("N")) {
+                mainCommand = "n";
+                system.leaveConfirmationMode();
+            } else {
+                mainCommand = "syntaxerror";
+            }
+        }
 
         switch (mainCommand) {
             case "HELP":
@@ -38,9 +53,25 @@ public class ProcessCommands {
                 system.getLogger().callClearLog(LOG_NORMAL);
                 break;
 
-            case "SHUTDOWN": // Antigo HALT,
-                system.getLogger().sysLog(INFO, "TERMINATING SESSION...", LOG_INSTANT);
-                core.turnOff(system); // Desliga direto
+            case "SHUTDOWN": // Antigo HALT
+                if (parts.length == 1) {
+                    system.getLogger().sysLog(INFO, "ARE YOU CERTAIN YOU WANT TO END CURRENT SESSION? [Y/N]", LOG_FAST);
+                    system.enterConfirmationMode();
+                }
+                if (parts.length >= 2) {
+                    if (parts[1].equals("Y")) {
+                        system.getLogger().sysLog(INFO, "TERMINATING SESSION...", LOG_INSTANT);
+                        system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, TIME_INFINITE);
+                    } else {
+                        system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
+                    }
+                }
+                break;
+            case "n":
+                system.getLogger().sysLog(INFO, "OPERATION CANCELLED", LOG_INSTANT);
+                break;
+            case "syntaxerror":
+                system.getLogger().sysLog(ERROR,"SYNTAX ERROR. TERMINATE SESSION? [Y/N]", LOG_INSTANT);
                 break;
 
 //                   ------------------- COMANDOS DE CRIPTOGRAFIA --------------------
@@ -52,7 +83,7 @@ public class ProcessCommands {
                 } else if (parts.length > 3) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST); // Invalid Args 9
                 } else {
-                    system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
+                    system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, TIME_FAST);
                 }
                 break;
 
@@ -104,7 +135,8 @@ public class ProcessCommands {
                 } else if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
-                    system.getDocReader().chitatMethod(system, system.getFileManager(), parts[1]);
+//                    system.getDocReader().chitatMethod(system, system.getFileManager(), parts[1]);
+                    system.getSoftwareManager().scheduleProtocol(system, core, cleanCommand, LOG_NORMAL);
                 }
                 break;
             default:

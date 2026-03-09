@@ -58,7 +58,6 @@ public class GameController {
                 screen.clear();
 
                 if (!dvk3System.isOn()) {
-                    // Tela preta quando desligado
                 } else {
                     viewer.draw(bunkerState, dvk3System, dvk3Core, docWindowView, animTick);
                 }
