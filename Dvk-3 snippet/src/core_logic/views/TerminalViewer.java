@@ -79,6 +79,12 @@ public class TerminalViewer {
         tGraphics.putString(25, 1, "MEM: 64KB OK");
         tGraphics.putString(40, 1, "UID: SN-0373");
 
+        String hourText = String.format(system.getFormattedHour());
+        int xHour = size.getColumns() - hourText.length() - 3;
+        tGraphics.putString(xHour, 1, hourText);
+
+
+
         // Removida temperatura pois core não processa mais isso na demo
 
         // borda direita
