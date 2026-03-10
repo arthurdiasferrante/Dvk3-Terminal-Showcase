@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 import static core_logic.models.filesystem.VirtualFile.FileType.*;
@@ -21,6 +23,8 @@ import static core_logic.models.utils.CryptoUtils.EncryptionType.*;
 public class Dvk3FileManager {
     private final VirtualFolder rootFolder;
     private VirtualFolder currentFolder;
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
 
     public Dvk3FileManager() {
@@ -74,9 +78,8 @@ public class Dvk3FileManager {
         // 4. SYS
         VirtualFolder sysFolder = new VirtualFolder(STANDART, "SYS", true, rootFolder);
         new VirtualFile(SYSTEM, "KERNEL.DAT", sysFolder, "BINARY DATA...");
-        new VirtualFile(EVENT_LOG, "BOOT.LOG", sysFolder, "System booted successfully at 08:00.");
+        new VirtualFile(EVENT_LOG, "BOOT.LOG", sysFolder, "System booted successfully at " + now.format(formatter) + ".");
     }
-
 
     public void dostupMethod(String rawCommand, Dvk3System system) {
         String[] parts = rawCommand.trim().split("\\s+");

@@ -68,6 +68,7 @@ public class Dvk3System {
     // --- Getters e Setters Essenciais ---
 
     public void setIsOn(boolean bool) {
+
         safeHaltScreen = false;
         isOn = bool;
     }

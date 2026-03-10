@@ -21,7 +21,6 @@ public class DocumentWindowViewer {
         Dvk3DocReader data = system.getDocReader();
         TextColor dimColor = new TextColor.RGB(60, 40, 0);
 
-        // Dimensões e Posição da Janela
         int w = 55;
         int h = 30;
         int startY = (screenSize.getRows() - h) / 2;
@@ -38,12 +37,12 @@ public class DocumentWindowViewer {
             }
         }
 
-        // 2. Desenha o Fundo da Janela
+        // Desenha o Fundo da Janela
         tGraphics.setForegroundColor(amber);
         tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         tGraphics.fillRectangle(new TerminalPosition(startX, startY), new TerminalSize(w, h), ' ');
 
-        // 3. Bordas
+        // Bordas
         tGraphics.drawLine(startX, startY, startX + w - 1, startY, '═');
         tGraphics.drawLine(startX, startY + h - 1, startX + w - 1, startY + h - 1, '═');
         tGraphics.drawLine(startX, startY, startX, startY + h - 1, '║');
@@ -55,22 +54,22 @@ public class DocumentWindowViewer {
         tGraphics.setCharacter(startX, startY + h - 1, '╚');
         tGraphics.setCharacter(startX + w - 1, startY + h - 1, '╝');
 
-        // 4. Header (Topo)
+        // 4. Header, topo com informações
         tGraphics.drawLine(startX, startY + 2, startX + w - 1, startY + 2, '═');
         tGraphics.setCharacter(startX, startY + 2, '╠');
         tGraphics.setCharacter(startX + w - 1, startY + 2, '╣');
 
         tGraphics.putString(startX + 2, startY + 1, "FILE: " + data.getReadFileName());
 
-        // Paginação
+        // Paginas na direita do header
         int current = data.getCurrentPage() + 1;
         int total = (data.getTotalLines() + data.getLINES_PER_PAGE() - 1) / data.getLINES_PER_PAGE();
-        if (total == 0) total = 1; // Proteção contra divisão por zero se arquivo vazio
+        if (total == 0) total = 1;
         String pages = String.format("[ PG %02d/%02d ]", current, total);
 
         tGraphics.putString(startX + w - pages.length() - 2, startY + 1, pages);
 
-        // 5. Footer (Rodapé - Apenas navegação simples)
+        // Footer, o rodapé
         String prev = "[◄] PREV";
         String exit = "[ESC] EXIT";
         String next = "[►] NEXT";
@@ -83,7 +82,7 @@ public class DocumentWindowViewer {
         tGraphics.putString(startX + (w - exit.length()) / 2, startY + h - 2, exit);
         tGraphics.putString(startX + w - next.length() - 2, startY + h - 2, next);
 
-        // 6. Content (Conteúdo do Texto Limpo)
+        // Content (Conteúdo do Texto Limpo)
         List<String> lines = data.getFormattedLines();
         if (lines == null) return;
 
@@ -93,11 +92,9 @@ public class DocumentWindowViewer {
         for (int i = start; i < end; i++) {
             String line = lines.get(i);
 
-            // Calcula posição Y com espaçamento duplo (i - start) * 2
             int yScreen = startY + 3 + ((i - start) * 2);
             int xBase = startX + 2;
 
-            // Desenha a linha simples, sem glitch, sem shake
             tGraphics.putString(xBase, yScreen, line);
         }
     }

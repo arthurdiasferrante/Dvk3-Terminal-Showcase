@@ -1,5 +1,7 @@
 package core_logic.models.system;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,11 +10,19 @@ public class Dvk3SystemLogger {
     private int clearTimer = -1;
     private final int MAX_HISTORY = 40;
     private boolean isBusy = false;
-    int heatingDelay;
+    private int heatingDelay;
+    private boolean typed;
+    private String realTime = " ";
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+
 
     private List<LogEntry> messageHistory = new ArrayList<>();
     private List<PendingMessage> pendingMessage = new ArrayList<>();
 
+    public void processTick(LocalDateTime localDateTime) {
+        realTime = localDateTime.format(formatter);
+    }
 
     public void processDisplayQueue(int heat) {
         heatingDelay = heat;
@@ -42,7 +52,7 @@ public class Dvk3SystemLogger {
     }
 
     public void userLog(String message, String formattedTime) { // logger
-        String prefix = ">> [" + formattedTime + "] ";
+        String prefix = ">> [" + realTime + "] ";
 
         messageHistory.add(new LogEntry(message, prefix, true));
 
@@ -50,6 +60,8 @@ public class Dvk3SystemLogger {
             messageHistory.removeFirst();
         }
     }
+
+
 
     public static enum LogType {
         INFO,
@@ -97,6 +109,15 @@ public class Dvk3SystemLogger {
         return isBusy;
     }
 
+    public boolean hasTyped() {
+        return typed;
+    }
+
+
+    public void triggerTyped() {
+        this.typed = true;
+    }
+
     public static class PendingMessage {
         LogType type;
         String message;
@@ -107,6 +128,8 @@ public class Dvk3SystemLogger {
             this.message = message;
             this.delayTicks = delayTicks;
         }
+
+
     }
 
     public static class LogEntry {
@@ -138,5 +161,6 @@ public class Dvk3SystemLogger {
         public boolean isInstant() {
             return instant;
         }
+
     }
 }

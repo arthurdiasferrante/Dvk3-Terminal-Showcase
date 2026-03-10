@@ -15,6 +15,8 @@ import core_logic.models.system.Dvk3System;
 
 import java.io.IOException;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class GameController {
     private long lastTickAnimation = System.currentTimeMillis();
@@ -27,6 +29,7 @@ public class GameController {
     private BunkerState bunkerState;
     private String historyCommand;
     private int commandIndex = 0;
+    private LocalDateTime realHourTime;
 
     public GameController(Screen screen) {
         this.screen = screen;
@@ -50,6 +53,10 @@ public class GameController {
         flushInput();
 
         resetTimers();
+
+        if (!dvk3System.getLogger().hasTyped()) {
+            dvk3System.inputBuffer.append("Type HELP for useful commands!");
+        }
         long lastTick = System.currentTimeMillis();
         long animTick = 0;
 
@@ -71,8 +78,11 @@ public class GameController {
                     lastTick = currentTime;
                 }
                 if (currentTime - lastTickAnimation > ANIMATION_FRAME_DELAY) {
+                    this.realHourTime = LocalDateTime.now();
                     dvk3System.processQueue();
                     dvk3System.getDocReader().processTick();
+                    dvk3System.getLogger().processTick(realHourTime);
+                    viewer.processTick(realHourTime);
                     animTick++;
                     lastTickAnimation = currentTime;
                 }
@@ -96,6 +106,7 @@ public class GameController {
     public void processKey() throws Exception {
         KeyStroke key = screen.pollInput();
 
+
         if (key != null){
             if (dvk3Core.getStandBy()) {
                 dvk3Core.setStandBy(false);
@@ -108,12 +119,14 @@ public class GameController {
             return;
         }
 
+
         if (key != null) {
             dvk3System.notifyTyping();
 
-            // Lógica do ESC (Ligar/Desligar/Sair do Documento)
+            // ESC
             if (key.getKeyType() == KeyType.Escape) {
-                // Se estiver a ler documento, sai dele
+                // Quando lendo um documento, sai dele
+
                 if (dvk3System.getDocReader().isOpen()) {
                     dvk3System.getDocReader().setOpen(false);
                     dvk3System.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
@@ -184,9 +197,15 @@ public class GameController {
                 return;
             }
 
+
             // --- LÓGICA DE DIGITAÇÃO NO TERMINAL ---
             else if (key.getKeyType() == KeyType.Character) {
-                // Proteção contra ghosting (tecla repetida muito rápido)
+                if (!dvk3System.getLogger().hasTyped()) {
+                    dvk3System.getLogger().triggerTyped();
+                    dvk3System.inputBuffer.setLength(0);
+                }
+
+                // Essa é uma proteção contra ghosting (tecla repetida muito rápido)
                 KeyStroke spyKey = screen.pollInput();
                 if (spyKey != null) {
                     flushInput();
@@ -202,12 +221,19 @@ public class GameController {
                     }
                 }
             }
+
             else if (key.getKeyType() == KeyType.Backspace) {
+                if (!dvk3System.getLogger().hasTyped()) {
+                    return;
+                }
                 if (!dvk3System.inputBuffer.isEmpty()) {
                     dvk3System.inputBuffer.deleteCharAt(dvk3System.inputBuffer.length() - 1);
                 }
             }
             else if (key.getKeyType() == KeyType.Enter) {
+                if (!dvk3System.getLogger().hasTyped() || dvk3System.inputBuffer.isEmpty()) {
+                    return;
+                }
                 String finalCommand = dvk3System.inputBuffer.toString();
                 dvk3System.getLogger().userLog(finalCommand, dvk3System.getFormattedHour());
                 dvk3System.addCommandToHistory(finalCommand);

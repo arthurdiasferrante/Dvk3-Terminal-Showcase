@@ -13,19 +13,27 @@ import core_logic.models.system.Dvk3System;
 import core_logic.models.physical.Dvk3Core;
 import core_logic.models.system.Dvk3SystemLogger;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class TerminalViewer {
     private Screen screen;
     private TextGraphics tGraphics;
     private Random random;
+    private TextGraphics dimPen;
     private SafeHaltScreen safeHaltScreen;
+    private LocalDateTime realDateTime;
+    private DateTimeFormatter formatter;
+    private String realTime = " ";
 
     public TerminalViewer(Screen screen) {
         this.screen = screen;
         this.tGraphics = screen.newTextGraphics();
+        this.dimPen = screen.newTextGraphics();
         this.random = new Random();
         this.safeHaltScreen = new SafeHaltScreen();
+        this.formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (screen instanceof TerminalScreen) {
             Terminal terminal = ((TerminalScreen) screen).getTerminal();
@@ -34,6 +42,10 @@ public class TerminalViewer {
                 ((SwingTerminalFrame) terminal).setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
         }
+    }
+
+    public void processTick(LocalDateTime localDateTime) {
+        realTime = localDateTime.format(formatter);
     }
 
     public void draw(BunkerState bunkerState, Dvk3System system, Dvk3Core core, DocumentWindowViewer docWindowView, long animTick) throws Exception {
@@ -50,6 +62,7 @@ public class TerminalViewer {
 
         screen.setCursorPosition(null);
         tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
+        dimPen.setForegroundColor(new TextColor.RGB(153, 105, 0));
         tGraphics.setForegroundColor(new TextColor.RGB(255, 176, 0));
         tGraphics.fillRectangle(new com.googlecode.lanterna.TerminalPosition(0, 0), size, ' ');
 
@@ -80,12 +93,9 @@ public class TerminalViewer {
         tGraphics.putString(40, 1, "UID: SN-0373");
 
         String hourText = String.format(system.getFormattedHour());
-        int xHour = size.getColumns() - hourText.length() - 3;
-        tGraphics.putString(xHour, 1, hourText);
+        int xHour = size.getColumns() - realTime.length() - 3;
+        tGraphics.putString(xHour, 1, realTime);
 
-
-
-        // Removida temperatura pois core não processa mais isso na demo
 
         // borda direita
         tGraphics.putString(size.getColumns() - 1, 1, "║");
@@ -115,7 +125,13 @@ public class TerminalViewer {
         String cursorChar = isCursorVisible ? "█" : " ";
         String promptTyping = dvk3System.inputBuffer.toString();
 
-        tGraphics.putString(2, yPrompt, prompt + promptTyping + cursorChar);
+        if (!dvk3System.getLogger().hasTyped()) {
+            dimPen.putString(2, yPrompt, prompt + promptTyping);
+            tGraphics.putString(2, yPrompt, prompt);
+        } else {
+            tGraphics.putString(2, yPrompt, prompt + promptTyping + cursorChar);
+        }
+
 
         java.util.List<Dvk3SystemLogger.LogEntry> history = dvk3System.getLogger().getHistory();
         int totalMessages = history.size();
