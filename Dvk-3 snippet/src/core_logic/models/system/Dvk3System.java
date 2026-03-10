@@ -147,10 +147,13 @@ public class Dvk3System {
     }
 
     public String getLastCommand() {
+        return lastCommand;
+    }
+
+    public void setLastCommand() {
         if (!isConfirmationMode()) {
             lastCommand = commandHistory.getLast();
         }
-        return lastCommand;
     }
 
     public boolean isSafeHalt() {

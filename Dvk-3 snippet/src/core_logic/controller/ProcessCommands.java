@@ -21,7 +21,8 @@ public class ProcessCommands {
         }
         String mainCommand = parts[0];
 
-        system.getLastCommand();
+        system.setLastCommand();
+
         if (system.isConfirmationMode()) {
             if (mainCommand.equals("Y")) {
                 cleanCommand = (system.getLastCommand()).toUpperCase() + " Y";
