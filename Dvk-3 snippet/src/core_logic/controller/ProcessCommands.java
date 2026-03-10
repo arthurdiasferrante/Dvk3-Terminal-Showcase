@@ -61,7 +61,7 @@ public class ProcessCommands {
                 }
                 if (parts.length >= 2) {
                     if (parts[1].equals("Y")) {
-                        system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_STANDARD);
+                        system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
                     } else {
                         system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                     }
