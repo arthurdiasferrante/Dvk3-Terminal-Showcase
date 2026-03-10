@@ -32,12 +32,14 @@ public class SafeHaltScreen {
     }
 
     private TextColor dynamicAmber() {
-        long loopTick = System.currentTimeMillis() % 7000;
+        long loopTick = System.currentTimeMillis() % 6000;
         long intensity;
-        if (loopTick < 5000) {
-            intensity = (loopTick * 100) / 5000;
+        if (loopTick < 2000) {
+            intensity = (loopTick * 100) / 2000;
+        } else if (loopTick < 4000) {
+            intensity = 100;
         } else {
-            intensity = (7000 - loopTick) * 100 / 1999;
+            intensity = (6000 - loopTick) * 100 / 1999;
         }
 
         double intensityFactor = (double) intensity / MAX_INTENSITY;
