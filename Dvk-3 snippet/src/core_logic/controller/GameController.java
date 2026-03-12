@@ -132,8 +132,7 @@ public class GameController {
                 // Quando lendo um documento, sai dele
 
                 if (dvk3System.getDocReader().isOpen()) {
-                    dvk3System.getDocReader().setOpen(false);
-                    dvk3System.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
+                    dvk3System.getDocReader().closeReadMode(dvk3System);
                     return;
                 }
                 if (dvk3System.isSafeHalt()) {

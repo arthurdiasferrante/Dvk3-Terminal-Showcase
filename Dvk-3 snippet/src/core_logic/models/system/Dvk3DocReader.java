@@ -1,6 +1,7 @@
 package core_logic.models.system;
 
 import core_logic.models.filesystem.VirtualFile;
+import core_logic.models.physical.Dvk3Core;
 import core_logic.models.utils.CryptoUtils;
 import core_logic.models.filesystem.Dvk3FileManager;
 
@@ -87,6 +88,11 @@ public class Dvk3DocReader {
         }
     }
 
+    public void closeReadMode(Dvk3System system) {
+        this.open = false;
+        system.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
+    }
+
     // --- GETTERS E SETTERS ---
 
 
@@ -113,6 +119,4 @@ public class Dvk3DocReader {
     public int getTotalLines() { return totalLines; }
 
     public boolean isOpen() { return open; }
-    public void setOpen(boolean open) { this.open = open; }
-
 }

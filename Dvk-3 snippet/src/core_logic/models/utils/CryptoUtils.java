@@ -38,6 +38,7 @@ public class CryptoUtils {
             file.addEncryption(EncryptionType.SAFE);
 
         }
+        // a razão de ser um for passando pelas camadas do ENUM é adicionar mais criptografias futuramente
 
         List<EncryptionType> layers = file.getEncryptionLayers();
 
@@ -110,6 +111,37 @@ public class CryptoUtils {
             }
         }
         return safeContent.toString();
+    }
+
+    public boolean manualSafeTuning(Dvk3System system, String file, boolean heavyTune, boolean increase) {
+        VirtualFile currentFile = system.getFileManager().getCurrentFolder().getFileByName(file);
+        int frequency = currentFile.getCurrentFrequency();
+
+        if (increase && frequency >= 16000) return false;
+        if (!increase && frequency <= 4000) return false;
+
+        int amount = heavyTune ? 1000 : 50;
+        int newFreq = increase ? (frequency + amount) : (frequency - amount);
+
+        if (newFreq > 16000) newFreq = 16000;
+        if (newFreq < 4000) newFreq = 4000;
+
+        currentFile.setCurrentFrequency(newFreq);
+        return true;
+    }
+
+    public boolean safeConfirmMethod(Dvk3System system, String file) {
+        VirtualFile currentFile = system.getFileManager().getCurrentFolder().getFileByName(file);
+        int idealFrequency = currentFile.getIDEAL_FREQUENCY();
+
+        int distance = Math.abs(idealFrequency - currentFile.getCurrentFrequency());
+        if (distance < TOLERANCE) {
+            currentFile.setCurrentFrequency(idealFrequency);
+            currentFile.setSafeCrypted(false);
+            currentFile.removeEncryption(EncryptionType.SAFE);
+            system.getDocReader().closeReadMode(system);
+            return true;
+        } else return false;
     }
 
 }

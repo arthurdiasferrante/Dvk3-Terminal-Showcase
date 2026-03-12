@@ -74,7 +74,7 @@ public class Dvk3System {
     public void killEverything(Dvk3Core core) {
         taskManager.killAllTasks();
         inputBuffer.setLength(0);
-        docReader.setOpen(false);
+        docReader.closeReadMode(this);
         fileManager.resetFolders();
         logger.clearLog();
     }
