@@ -49,12 +49,12 @@ public class ProcessCommands {
                 system.getLogger().sysLog(INFO, "> CLEAR       : Clear screen", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> SHUTDOWN    : Power off system", LOG_NORMAL);
                 break;
-            case "CLEAR": // Limpar tela
+            case "CLEAR": // limpar tela
                 system.getLogger().sysLog(INFO, "CLEARING BUFFER...", LOG_INSTANT);
                 system.getLogger().callClearLog(LOG_NORMAL);
                 break;
 
-            case "SHUTDOWN": // Antigo HALT
+            case "SHUTDOWN": // antigo HALT
                 if (parts.length == 1) {
                     system.getLogger().sysLog(INFO, "ARE YOU CERTAIN YOU WANT TO END CURRENT SESSION? [Y/N]", LOG_FAST);
                     system.enterConfirmationMode();
@@ -75,7 +75,6 @@ public class ProcessCommands {
                 break;
 
 //                   ------------------- COMANDOS DE CRIPTOGRAFIA --------------------
-
             case "DECRYPT":
             case "FIX":
                 if (parts.length < 3) { // STABILIZE ARQUIVO FREQUENCIA
@@ -100,7 +99,7 @@ public class ProcessCommands {
 
             case "LS":
             case "LIST":
-            case "DIR": // Listar arquivos
+            case "DIR": // listar arquivos
                 if (parts.length > 1) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
@@ -108,7 +107,7 @@ public class ProcessCommands {
                 }
                 break;
 
-            case "CD": // Acessar pasta
+            case "CD": // acessar pasta
                 if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else if (parts.length == 1) {
@@ -119,7 +118,7 @@ public class ProcessCommands {
                 break;
 
             case "ROOT":
-            case "/": // Voltar para raiz
+            case "/": // voltar para raiz
                 if (parts.length > 1) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
@@ -139,13 +138,12 @@ public class ProcessCommands {
                 }
                 break;
             default:
-                // Tenta executar arquivo direto pelo nome (ex: NOTES.TXT ou apenas NOTES)
+                // tenta executar arquivo direto pelo nome (ex: NOTES.TXT ou apenas NOTES)
                 VirtualFile executableFile = system.getFileManager().checkExecutableFiles(mainCommand, system);
 
                 if (executableFile != null) {
                     system.getLogger().sysLog(SUCCESS, "EXECUTING " + executableFile.getFileName(), LOG_FAST);
                 } else {
-                    // Se não for comando nem arquivo, erro padrão
                     if (system.getFileManager().getCurrentFolder().getFileByName(mainCommand) == null) {
                         system.getLogger().sysLog(ERROR, getError(1), LOG_FAST); // Command not found
                     }

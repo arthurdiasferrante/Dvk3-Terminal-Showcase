@@ -11,19 +11,20 @@ import java.util.List;
 public class Dvk3DocReader {
     private boolean open = false;
 
-    // Estado de Paginação
+    // estado de Paginação
+    private boolean tuningMode;
     private int currentPage = 0;
     private final int LINES_PER_PAGE = 12;
     private int totalLines = 0;
     private List<String> formattedLines = new ArrayList<>();
 
-    // Contexto do Arquivo Aberto
+    // contexto do Arquivo Aberto
     private VirtualFile openedFile;
     private Dvk3System systemRef;
 
     // --- LÓGICA CORE ---
 
-    // Chamado a cada frame: Atualiza o texto se for um arquivo criptografado (SAFE)
+    // chamado a cada frame: Atualiza o texto se for um arquivo criptografado (SAFE)
     public void processTick() {
         if (open && openedFile != null && systemRef != null) {
             if (openedFile.getEncryptionLayers().contains(CryptoUtils.EncryptionType.SAFE)) {
@@ -33,24 +34,25 @@ public class Dvk3DocReader {
         }
     }
 
-    // Métoddo principal para abrir um arquivo (Chamado pelo comando CAT)
-    public void chitatMethod(Dvk3System system, Dvk3FileManager fileManager, String fileName) {
+    // métoddo principal para abrir um arquivo (Chamado pelo comando CAT)
+    public void chitatMethod(Dvk3System system, Dvk3FileManager fileManager, String fileName, boolean setTuningMode) {
         this.systemRef = system;
         this.currentPage = 0;
+        this.tuningMode = setTuningMode;
 
-        // Busca o arquivo na pasta atual
+        // busca o arquivo na pasta atual
         this.openedFile = fileManager.getCurrentFolder().getFileByName(fileName);
 
         if (openedFile == null) return;
 
-        // Gera o conteúdo inicial
+        // gera o conteúdo inicial
         String content = system.getCryptoUtils().encryptContent(openedFile);
         wordWrap(content, 51);
 
         this.open = true;
     }
 
-    // Algoritmo de quebra de linha para caber na janela do terminal
+    // algoritmo de quebra de linha para caber na janela do terminal
     private void wordWrap(String content, int maxWidth) {
         formattedLines.clear();
         String[] words = content.split(" ");
@@ -91,6 +93,7 @@ public class Dvk3DocReader {
     public void closeReadMode(Dvk3System system) {
         this.open = false;
         system.getTaskManager().killTaskByName("CHITAT_PROTOKOL");
+        currentPage = 0;
     }
 
     // --- GETTERS E SETTERS ---
@@ -119,4 +122,8 @@ public class Dvk3DocReader {
     public int getTotalLines() { return totalLines; }
 
     public boolean isOpen() { return open; }
+
+    public boolean isTuningMode() {
+        return tuningMode;
+    }
 }

@@ -11,6 +11,7 @@ import core_logic.models.physical.Dvk3Core;
 import core_logic.models.system.Dvk3DocReader;
 import core_logic.models.system.Dvk3System;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class DocumentWindowViewer {
@@ -26,7 +27,6 @@ public class DocumentWindowViewer {
         int startY = (screenSize.getRows() - h) / 2;
         int startX = (screenSize.getColumns() - w) / 2;
 
-        // 1. Dimmer Background (Escurece o fundo atrás da janela)
         for (int y = 0; y < screenSize.getRows(); y++) {
             for (int x = 0; x < screenSize.getColumns(); x++) {
                 TextCharacter c = screen.getFrontCharacter(x, y);
@@ -37,31 +37,31 @@ public class DocumentWindowViewer {
             }
         }
 
-        // Desenha o Fundo da Janela
+        // desenha o Fundo da Janela
         tGraphics.setForegroundColor(amber);
         tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         tGraphics.fillRectangle(new TerminalPosition(startX, startY), new TerminalSize(w, h), ' ');
 
-        // Bordas
+        // bordas
         tGraphics.drawLine(startX, startY, startX + w - 1, startY, '═');
         tGraphics.drawLine(startX, startY + h - 1, startX + w - 1, startY + h - 1, '═');
         tGraphics.drawLine(startX, startY, startX, startY + h - 1, '║');
         tGraphics.drawLine(startX + w - 1, startY, startX + w - 1, startY + h - 1, '║');
 
-        // Cantos
+        // cantos
         tGraphics.setCharacter(startX, startY, '╔');
         tGraphics.setCharacter(startX + w - 1, startY, '╗');
         tGraphics.setCharacter(startX, startY + h - 1, '╚');
         tGraphics.setCharacter(startX + w - 1, startY + h - 1, '╝');
 
-        // 4. Header, topo com informações
+        // header, topo com informações
         tGraphics.drawLine(startX, startY + 2, startX + w - 1, startY + 2, '═');
         tGraphics.setCharacter(startX, startY + 2, '╠');
         tGraphics.setCharacter(startX + w - 1, startY + 2, '╣');
 
         tGraphics.putString(startX + 2, startY + 1, "FILE: " + data.getReadFileName());
 
-        // Paginas na direita do header
+        // paginas na direita do header
         int current = data.getCurrentPage() + 1;
         int total = (data.getTotalLines() + data.getLINES_PER_PAGE() - 1) / data.getLINES_PER_PAGE();
         if (total == 0) total = 1;
@@ -69,10 +69,27 @@ public class DocumentWindowViewer {
 
         tGraphics.putString(startX + w - pages.length() - 2, startY + 1, pages);
 
-        // Footer, o rodapé
+        drawFooter(system, tGraphics, screenSize);
+
+    }
+
+    public void drawFooter(Dvk3System system, TextGraphics tGraphics, TerminalSize screenSize) {
+        Dvk3DocReader data = system.getDocReader();
+        int w = 55;
+        int h = 30;
+        int startY = (screenSize.getRows() - h) / 2;
+        int startX = (screenSize.getColumns() - w) / 2;
+
         String prev = "[◄] PREV";
         String exit = "[ESC] EXIT";
         String next = "[►] NEXT";
+
+        if (data.isTuningMode()) {
+            DecimalFormat df = new DecimalFormat("#,##0,000");
+            exit = df.format(data.getCurrentFrequency()) + "Hz";
+            next = "[ENTER] CONFIRM";
+            prev = "[ESC] CANCEL";
+        }
 
         tGraphics.drawLine(startX, startY + h - 3, startX + w - 1, startY + h - 3, '═');
         tGraphics.setCharacter(startX, startY + h - 3, '╠');
@@ -82,7 +99,6 @@ public class DocumentWindowViewer {
         tGraphics.putString(startX + (w - exit.length()) / 2, startY + h - 2, exit);
         tGraphics.putString(startX + w - next.length() - 2, startY + h - 2, next);
 
-        // Content (Conteúdo do Texto Limpo)
         List<String> lines = data.getFormattedLines();
         if (lines == null) return;
 
@@ -97,5 +113,9 @@ public class DocumentWindowViewer {
 
             tGraphics.putString(xBase, yScreen, line);
         }
+    }
+
+    public void drawSafeDecryption() {
+
     }
 }

@@ -76,6 +76,11 @@ public class Dvk3SystemLogger {
         pendingMessage.add(new PendingMessage(type, message,delay + heatingDelay));
     }
 
+    public void sysLog(LogType type, String message, int delay, boolean lockInput) {
+        isBusy = lockInput;
+        pendingMessage.add(new PendingMessage(type, message, delay + heatingDelay));
+    }
+
     public void sysLog(LogType type, String message) {
         String prefix = switch (type) {
             case INFO -> ">> SYS.OP  :: ";

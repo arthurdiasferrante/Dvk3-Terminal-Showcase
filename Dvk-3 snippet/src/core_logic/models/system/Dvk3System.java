@@ -63,9 +63,10 @@ public class Dvk3System {
                 "Welcome to the interactive portfolio simulation.",
                 "Type [HELP] to begin navigation.",
                 "Made by Arthur Dias Ferrante",
+                "Waiting input..."
         };
         for (String message : messages) {
-            getLogger().sysLog(Dvk3SystemLogger.LogType.INFO, message, messageDelay);
+            getLogger().sysLog(Dvk3SystemLogger.LogType.INFO, message, messageDelay, false);
             messageDelay += 20;
         }
     }
