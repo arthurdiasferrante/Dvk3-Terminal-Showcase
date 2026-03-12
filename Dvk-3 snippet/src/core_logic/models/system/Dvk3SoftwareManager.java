@@ -53,10 +53,8 @@ public class Dvk3SoftwareManager {
                 case "OPEN":
                     Dvk3TaskManager.Task docVisualizerTask = new Dvk3TaskManager.Task("CHITAT_PROTOKOL", TIME_INFINITE);
                     system.getTaskManager().addTask(docVisualizerTask);
-                    system.getDocReader().chitatMethod(system, system.getFileManager(), file, false);
-                    break;
-                case "SAFE":
                     system.getDocReader().chitatMethod(system, system.getFileManager(), file, true);
+                    break;
                 case "SHUTDOWN":
                     system.triggerSafeHalt();
                     break;

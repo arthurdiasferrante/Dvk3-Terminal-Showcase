@@ -3,6 +3,9 @@ package core_logic.controller;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
+import core_logic.controller.states.DocReaderState;
+import core_logic.controller.states.SystemState;
+import core_logic.controller.states.TerminalState;
 import core_logic.models.BunkerState;
 import static core_logic.models.rules.Dvk3Config.*;
 
@@ -24,22 +27,28 @@ public class GameController {
     private Screen screen;
     private Dvk3System dvk3System;
     private Dvk3Core dvk3Core;
-    private ProcessCommands processComands;
+    private ProcessCommands processCommands;
     private TerminalViewer viewer;
     private DocumentWindowViewer docWindowView;
     private BunkerState bunkerState;
     private String historyCommand;
     private int commandIndex = 0;
     private LocalDateTime realHourTime;
+    private TerminalState terminalState;
+    private DocReaderState docReaderState;
+    private SystemState currentState;
 
     public GameController(Screen screen) {
         this.screen = screen;
         this.bunkerState = new BunkerState();
         this.dvk3System = new Dvk3System();
         this.dvk3Core = new Dvk3Core(30);
-        this.processComands = new ProcessCommands();
+        this.processCommands = new ProcessCommands();
         this.viewer = new TerminalViewer(screen);
         this.docWindowView = new DocumentWindowViewer();
+        this.terminalState = new TerminalState();
+        this.docReaderState = new DocReaderState();
+        this.currentState = terminalState;
     }
 
     public void processTick() {
@@ -47,6 +56,8 @@ public class GameController {
         dvk3System.processTick(dvk3Core);
         bunkerState.processTick();
     }
+
+    
 
 
 
@@ -242,9 +253,34 @@ public class GameController {
                 dvk3System.addCommandToHistory(finalCommand);
                 commandIndex = dvk3System.getCommandHistoryMessageSize();
                 Thread.sleep(50);
-                processComands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
+                processCommands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
                 dvk3System.inputBuffer.setLength(0);
             }
         }
+    }
+
+
+
+    // ------ GETTERS, SETTERS ------
+
+
+    public Dvk3Core getDvk3Core() {
+        return dvk3Core;
+    }
+
+    public BunkerState getBunkerState() {
+        return bunkerState;
+    }
+
+    public ProcessCommands getProcessCommands() {
+        return processCommands;
+    }
+
+    public int getCommandIndex() {
+        return commandIndex;
+    }
+
+    public void setCommandIndex(int commandIndex) {
+        this.commandIndex = commandIndex;
     }
 }

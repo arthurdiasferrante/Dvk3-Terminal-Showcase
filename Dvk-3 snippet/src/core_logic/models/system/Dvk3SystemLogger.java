@@ -118,7 +118,6 @@ public class Dvk3SystemLogger {
         return typed;
     }
 
-
     public void triggerTyped() {
         this.typed = true;
     }
@@ -136,6 +135,7 @@ public class Dvk3SystemLogger {
 
 
     }
+
 
     public static class LogEntry {
         private String message;
