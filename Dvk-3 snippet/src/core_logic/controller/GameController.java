@@ -7,6 +7,7 @@ import core_logic.models.BunkerState;
 import static core_logic.models.rules.Dvk3Config.*;
 
 import core_logic.models.physical.Dvk3Core;
+import core_logic.models.system.Dvk3SystemLogger;
 import core_logic.views.BootSequence;
 import core_logic.views.DocumentWindowViewer;
 import core_logic.views.SafeHaltScreen;
@@ -47,12 +48,15 @@ public class GameController {
         bunkerState.processTick();
     }
 
+
+
     public void startGame() throws Exception {
         BootSequence bootSequence = new BootSequence(screen);
         bootSequence.execute();
         flushInput();
 
         resetTimers();
+        dvk3System.welcomeMessages();
 
         if (!dvk3System.getLogger().hasTyped()) {
             dvk3System.inputBuffer.append("Type HELP for useful commands!");

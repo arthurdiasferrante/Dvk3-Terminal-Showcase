@@ -56,6 +56,20 @@ public class Dvk3System {
         logger.processDisplayQueue(0);
     }
 
+    public void welcomeMessages() {
+        int messageDelay = LOG_SLOW;
+        String[] messages = {
+                "DVK-3 OS ONLINE.",
+                "Welcome to the interactive portfolio simulation.",
+                "Type [HELP] to begin navigation.",
+                "Made by Arthur Dias Ferrante",
+        };
+        for (String message : messages) {
+            getLogger().sysLog(Dvk3SystemLogger.LogType.INFO, message, messageDelay);
+            messageDelay += 20;
+        }
+    }
+
     // Reseta o sistema
     public void killEverything(Dvk3Core core) {
         taskManager.killAllTasks();
