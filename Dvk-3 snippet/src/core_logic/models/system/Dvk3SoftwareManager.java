@@ -22,7 +22,7 @@ public class Dvk3SoftwareManager {
             return;
         }
         boolean protocolScheduled = false;
-        if (command.startsWith("STABILIZE")) {
+        if (command.startsWith("FIX") || command.startsWith("DECRYPT")) {
             protocolScheduled = decryptorProtocol(system, command, time);
         }
         if (command.startsWith("READ") || command.startsWith("CAT") || command.startsWith("OPEN")) {
@@ -30,6 +30,9 @@ public class Dvk3SoftwareManager {
         }
         if (command.startsWith("SHUTDOWN")) {
             protocolScheduled = safeShutdownProtocol(system, time);
+        }
+        if (command.startsWith("STABILIZE")) {
+            protocolScheduled = false;
         }
         if (protocolScheduled) {
             pendingAction = command;
@@ -43,7 +46,8 @@ public class Dvk3SoftwareManager {
             String mainCommand = pendingAction.split(" ")[0];
             String file = pendingAction.split(" ")[1];
             switch (mainCommand) {
-                case "STABILIZE":
+                case "FIX":
+                case "DECRYPT":
                     int frequency = Integer.parseInt(pendingAction.split(" ")[2]);
                     system.getCryptoUtils().safeDecryptor(system, file, frequency);
                     break;

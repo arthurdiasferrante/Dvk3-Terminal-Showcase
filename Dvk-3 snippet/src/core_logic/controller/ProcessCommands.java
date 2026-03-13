@@ -78,15 +78,21 @@ public class ProcessCommands {
             case "DECRYPT":
             case "FIX":
                 if (parts.length < 3) { // STABILIZE ARQUIVO FREQUENCIA
-                    system.getLogger().sysLog(ERROR, getError(7), LOG_FAST); // Syntax Error 7
+                    system.getLogger().sysLog(ERROR, getError(7), LOG_FAST);
                 } else if (parts.length > 3) {
-                    system.getLogger().sysLog(ERROR, getError(9), LOG_FAST); // Invalid Args 9
+                    system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
                     system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
                 }
                 break;
             case "STABILIZE":
-                system.getDocReader().chitatMethod(system, system.getFileManager(), "CONTACT1", true);
+                if (parts.length < 2) {
+                    system.getLogger().sysLog(ERROR, getError(7), LOG_FAST);
+                } else if (parts.length > 3) {
+                    system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
+                } else {
+                    system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
+                }
                 break;
             case "CHECK":
                 if (parts.length > 1) {
