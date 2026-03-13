@@ -3,6 +3,7 @@ package core_logic.controller;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
+import core_logic.controller.states.DocDecryptingState;
 import core_logic.controller.states.DocReaderState;
 import core_logic.controller.states.SystemState;
 import core_logic.controller.states.TerminalState;
@@ -57,8 +58,9 @@ public class GameController {
         bunkerState.processTick();
     }
 
-    
-
+    public void changeState(SystemState newState) {
+        this.currentState = newState;
+    }
 
 
     public void startGame() throws Exception {
@@ -119,8 +121,8 @@ public class GameController {
     }
 
     public void processKey() throws Exception {
-        KeyStroke key = screen.pollInput();
 
+        KeyStroke key = screen.pollInput();
 
         if (key != null){
             if (dvk3Core.getStandBy()) {
@@ -141,11 +143,6 @@ public class GameController {
             // ESC
             if (key.getKeyType() == KeyType.Escape) {
                 // Quando lendo um documento, sai dele
-
-                if (dvk3System.getDocReader().isOpen()) {
-                    dvk3System.getDocReader().closeReadMode(dvk3System);
-                    return;
-                }
                 if (dvk3System.isSafeHalt()) {
                     dvk3Core.turnOff(dvk3System);
                     return;
@@ -164,98 +161,15 @@ public class GameController {
                 return;
             }
 
-            // --- LÓGICA DE CONTROLE DO LEITOR DE DOCUMENTOS (READ) ---
             if (dvk3System.getDocReader().isOpen()) {
-                if (key.getKeyType() == KeyType.ArrowLeft) {
-                    dvk3System.getDocReader().returnPage();
-                }
-
-                if (key.getKeyType() == KeyType.ArrowRight) {
-                    dvk3System.getDocReader().nextPage();
-                }
-            }
-
-            // -- ACESSANDO HISTÓRICO DE MENSAGENS DO TERMINAL --
-            int historySize = dvk3System.getCommandHistoryMessageSize();
-            if (key.getKeyType() == KeyType.ArrowUp) {
-                if (commandIndex > 0) {
-                    commandIndex--;
+                if (dvk3System.getDocReader().isTuningMode()) {
+                    changeState(new DocDecryptingState());
                 } else {
-                    commandIndex = historySize;
-                }
-                dvk3System.inputBuffer.setLength(0);
-                if (commandIndex != historySize) {
-                    String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                    dvk3System.inputBuffer.append(historyCommand);
-                }
-            } else if (key.getKeyType() == KeyType.ArrowDown) {
-                if (commandIndex < historySize) {
-                    commandIndex++;
-                } else {
-                    commandIndex = 0;
-                }
-
-                dvk3System.inputBuffer.setLength(0);
-
-                if (commandIndex != historySize) {
-                    String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                    dvk3System.inputBuffer.append(historyCommand);
-                }
-
-            } else {
-                commandIndex = historySize;
-            }
-
-            // Se o documento estiver aberto, ignora digitação no terminal
-            if (dvk3System.getDocReader().isOpen()) {
-                return;
-            }
-
-
-            // --- LÓGICA DE DIGITAÇÃO NO TERMINAL ---
-            else if (key.getKeyType() == KeyType.Character) {
-                if (!dvk3System.getLogger().hasTyped()) {
-                    dvk3System.getLogger().triggerTyped();
-                    dvk3System.inputBuffer.setLength(0);
-                }
-
-                // Essa é uma proteção contra ghosting (tecla repetida muito rápido)
-                KeyStroke spyKey = screen.pollInput();
-                if (spyKey != null) {
-                    flushInput();
-                    return;
-                }
-
-                char c = key.getCharacter();
-                if (c >= 32 && c < 127) {
-                    if (!Character.isISOControl(c)) {
-                        if (dvk3System.inputBuffer.length() < 50) {
-                            dvk3System.inputBuffer.append(key.getCharacter());
-                        }
-                    }
+                    changeState(new DocReaderState());
                 }
             }
 
-            else if (key.getKeyType() == KeyType.Backspace) {
-                if (!dvk3System.getLogger().hasTyped()) {
-                    return;
-                }
-                if (!dvk3System.inputBuffer.isEmpty()) {
-                    dvk3System.inputBuffer.deleteCharAt(dvk3System.inputBuffer.length() - 1);
-                }
-            }
-            else if (key.getKeyType() == KeyType.Enter) {
-                if (!dvk3System.getLogger().hasTyped() || dvk3System.inputBuffer.isEmpty()) {
-                    return;
-                }
-                String finalCommand = dvk3System.inputBuffer.toString();
-                dvk3System.getLogger().userLog(finalCommand, dvk3System.getFormattedHour());
-                dvk3System.addCommandToHistory(finalCommand);
-                commandIndex = dvk3System.getCommandHistoryMessageSize();
-                Thread.sleep(50);
-                processCommands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
-                dvk3System.inputBuffer.setLength(0);
-            }
+            currentState.handleInput(dvk3System, key, this, screen);
         }
     }
 

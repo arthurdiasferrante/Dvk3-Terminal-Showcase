@@ -9,22 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dvk3DocReader {
+
     private boolean open = false;
 
-    // estado de Paginação
-    private boolean tuningMode;
+    // paginação
     private int currentPage = 0;
     private final int LINES_PER_PAGE = 12;
     private int totalLines = 0;
     private List<String> formattedLines = new ArrayList<>();
 
-    // contexto do Arquivo Aberto
+    // úteis para decriptar
+    private boolean tuningMode;
+    private long lastInteractionTime;
+    private String lastKeyInteracted = "";
+    // contexto do arquivo aberto
     private VirtualFile openedFile;
     private Dvk3System systemRef;
 
-    // --- LÓGICA CORE ---
+    // --- CORE ---
 
-    // chamado a cada frame: Atualiza o texto se for um arquivo criptografado (SAFE)
     public void processTick() {
         if (open && openedFile != null && systemRef != null) {
             if (openedFile.getEncryptionLayers().contains(CryptoUtils.EncryptionType.SAFE)) {
@@ -40,12 +43,10 @@ public class Dvk3DocReader {
         this.currentPage = 0;
         this.tuningMode = setTuningMode;
 
-        // busca o arquivo na pasta atual
         this.openedFile = fileManager.getCurrentFolder().getFileByName(fileName);
 
         if (openedFile == null) return;
 
-        // gera o conteúdo inicial
         String content = system.getCryptoUtils().encryptContent(openedFile);
         wordWrap(content, 51);
 
@@ -96,8 +97,26 @@ public class Dvk3DocReader {
         currentPage = 0;
     }
 
+    // --- CRIPTOGRAFIA ---
+
+    public void notifyInteractor(long currentTime) {
+        this.lastInteractionTime = currentTime;
+    }
+
     // --- GETTERS E SETTERS ---
 
+
+    public void setLastInteractionTime(long lastInteractionTime) {
+        this.lastInteractionTime = lastInteractionTime;
+    }
+
+    public void setLastKeyInteracted(String lastKeyInteracted) {
+        this.lastKeyInteracted = lastKeyInteracted;
+    }
+
+    public String getLastKeyInteracted() {
+        return lastKeyInteracted;
+    }
 
     public int getCurrentFrequency() {
         return openedFile != null ? openedFile.getCurrentFrequency() : 0;
@@ -126,4 +145,9 @@ public class Dvk3DocReader {
     public boolean isTuningMode() {
         return tuningMode;
     }
+
+    public long getLastInteractionTime() {
+        return lastInteractionTime;
+    }
+
 }

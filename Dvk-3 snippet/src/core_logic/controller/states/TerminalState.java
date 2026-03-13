@@ -110,6 +110,7 @@ public class TerminalState implements SystemState {
         dvk3System.addCommandToHistory(finalCommand);
         controller.setCommandIndex(dvk3System.getCommandHistoryMessageSize());
         Thread.sleep(50);
+
         processCommands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
         dvk3System.inputBuffer.setLength(0);
     }

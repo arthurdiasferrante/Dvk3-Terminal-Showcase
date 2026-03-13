@@ -37,7 +37,6 @@ public class Dvk3SoftwareManager {
     }
 
     public void updateSoftwareState(Dvk3System system) {
-
         if (executionTimer > 0) {
             executionTimer--;
         } else if (executionTimer == 0 && pendingAction != null) {
@@ -53,7 +52,7 @@ public class Dvk3SoftwareManager {
                 case "OPEN":
                     Dvk3TaskManager.Task docVisualizerTask = new Dvk3TaskManager.Task("CHITAT_PROTOKOL", TIME_INFINITE);
                     system.getTaskManager().addTask(docVisualizerTask);
-                    system.getDocReader().chitatMethod(system, system.getFileManager(), file, true);
+                    system.getDocReader().chitatMethod(system, system.getFileManager(), file, false);
                     break;
                 case "SHUTDOWN":
                     system.triggerSafeHalt();

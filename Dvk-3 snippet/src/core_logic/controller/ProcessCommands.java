@@ -85,8 +85,9 @@ public class ProcessCommands {
                     system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);
                 }
                 break;
-
-
+            case "STABILIZE":
+                system.getDocReader().chitatMethod(system, system.getFileManager(), "CONTACT1", true);
+                break;
             case "CHECK":
                 if (parts.length > 1) {
                     system.getFileManager().getFrequency(parts[1], system);

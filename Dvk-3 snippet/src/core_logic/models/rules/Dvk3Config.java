@@ -24,6 +24,11 @@ public class Dvk3Config {
     public static final int TIME_LONG_PROCESS = 300;
     public static final int TIME_INFINITE = -1;
 
+    // protocolo safe
+    public static final int COARSE_FREQUENCY_DELAY = 3000;
+    public static final int FINE_FREQUENCY_DELAY = 500;
+
+
     // historico de comandos
     public static final int MAX_HISTORY_COMMANDS = 6;
 }

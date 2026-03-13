@@ -21,7 +21,7 @@ public class DocReaderState implements SystemState {
         else if (key.getKeyType() == KeyType.Escape) {
             system.getDocReader().closeReadMode(system);
 
-//            controller.changeState(new TerminalState());
+            controller.changeState(new TerminalState());
         }
     }
 }
