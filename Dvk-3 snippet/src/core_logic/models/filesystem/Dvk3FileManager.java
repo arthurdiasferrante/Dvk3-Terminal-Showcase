@@ -57,6 +57,7 @@ public class Dvk3FileManager {
         String contactContent = loadTextResource("contacts.txt");
         String projectsContent = loadTextResource("projects.txt");
         String secretLore = loadTextResource("secret.txt");
+        String decryptionTutorial = loadTextResource("tutorial");
 
         // 1. ROOT (/)
 //        new VirtualFile(TEXT, "README.TXT", rootFolder, readmeContent);
@@ -68,17 +69,18 @@ public class Dvk3FileManager {
 
         // 3. HOME (/HOME)
         VirtualFolder homeFolder = new VirtualFolder(STANDART, "HOME", true, rootFolder);
-        new VirtualFile(TEXT, "CONTACT1.TXT", homeFolder, contactContent);
-        new VirtualFile(TEXT, "PROJECTS.TXT", homeFolder, projectsContent);
+        new VirtualFile(TEXT, "CONTACT1", homeFolder, contactContent);
+        new VirtualFile(TEXT, "PROJECTS", homeFolder, projectsContent);
 
         //
         VirtualFolder secretFolder = new VirtualFolder(STANDART, "PRIVATE", true, homeFolder);
-        new VirtualFile(TEXT, "DIARY.LOG", secretFolder, secretLore).addEncryption(SAFE);
+        new VirtualFile(TEXT, "TUTORIAL", secretFolder, decryptionTutorial);
+        new VirtualFile(TEXT, "DIARY", secretFolder, secretLore).addEncryption(SAFE);
 
         // 4. SYS
         VirtualFolder sysFolder = new VirtualFolder(STANDART, "SYS", true, rootFolder);
-        new VirtualFile(SYSTEM, "KERNEL.DAT", sysFolder, "BINARY DATA...");
-        new VirtualFile(EVENT_LOG, "BOOT.LOG", sysFolder, "System booted successfully at " + now.format(formatter) + ".");
+        new VirtualFile(SYSTEM, "KERNEL", sysFolder, "BINARY DATA...");
+        new VirtualFile(EVENT_LOG, "BOOT", sysFolder, "System booted successfully at " + now.format(formatter) + ".");
     }
 
     public void dostupMethod(String rawCommand, Dvk3System system) {

@@ -45,7 +45,9 @@ public class ProcessCommands {
                 system.getLogger().sysLog(INFO, "> LS          : List files", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> CD [DIR]    : Change directory (.. to go back)", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> CAT [FILE]  : Read file content", LOG_NORMAL);
+                system.getLogger().sysLog(INFO, "> ROOT        : Back to root folder", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> DECRYPT     : Decrypt secure files", LOG_NORMAL);
+                system.getLogger().sysLog(INFO, "> STABILIZE   : Decrypt interface files", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> CLEAR       : Clear screen", LOG_NORMAL);
                 system.getLogger().sysLog(INFO, "> SHUTDOWN    : Power off system", LOG_NORMAL);
                 break;
@@ -88,7 +90,7 @@ public class ProcessCommands {
             case "STABILIZE":
                 if (parts.length < 2) {
                     system.getLogger().sysLog(ERROR, getError(7), LOG_FAST);
-                } else if (parts.length > 3) {
+                } else if (parts.length > 2) {
                     system.getLogger().sysLog(ERROR, getError(9), LOG_FAST);
                 } else {
                     system.getSoftwareManager().scheduleProtocol(system, cleanCommand, TIME_FAST);

@@ -1,13 +1,13 @@
 package core_logic.models.system;
 
-import core_logic.models.rules.Dvk3Config;
-import core_logic.models.utils.CryptoUtils;
 import core_logic.models.filesystem.VirtualFile;
-import core_logic.models.physical.Dvk3Core;
+import core_logic.models.utils.CryptoUtils;
 
+import java.util.Random;
+
+import static core_logic.models.rules.DigitalManual.getError;
 import static core_logic.models.rules.Dvk3Config.*;
 import static core_logic.models.system.Dvk3SystemLogger.LogType.*;
-import static core_logic.models.rules.DigitalManual.*;
 
 public class Dvk3SoftwareManager {
     private final CryptoUtils cryptoUtils = new CryptoUtils();
@@ -32,7 +32,7 @@ public class Dvk3SoftwareManager {
             protocolScheduled = safeShutdownProtocol(system, time);
         }
         if (command.startsWith("STABILIZE")) {
-            protocolScheduled = false;
+            protocolScheduled = interfaceStabilizeProtocol(system, command, time);
         }
         if (protocolScheduled) {
             pendingAction = command;
@@ -60,6 +60,11 @@ public class Dvk3SoftwareManager {
                     break;
                 case "SHUTDOWN":
                     system.triggerSafeHalt();
+                    break;
+                case "STABILIZE":
+                    Dvk3TaskManager.Task docStabilizeTask = new Dvk3TaskManager.Task("STABILIZE_PROTOKOL", TIME_INFINITE);
+                    system.getTaskManager().addTask(docStabilizeTask);
+                    system.getDocReader().chitatMethod(system, system.getFileManager(), file, true);
                     break;
             }
             pendingAction = null;
@@ -90,6 +95,28 @@ public class Dvk3SoftwareManager {
 
         system.getLogger().sysLog(SUCCESS, "PLEASE WAIT", LOG_SLOW);
         this.executionTimer = time + system.getHeatingDelay();
+        return true;
+    }
+
+    private boolean interfaceStabilizeProtocol(Dvk3System system, String command, int time) {
+        String[] commandParts = command.split("\\s+");
+        String fileString = commandParts[1];
+        if (system.getFileManager().getCurrentFolder().getFileByName(fileString) == null) {
+            system.getLogger().sysLog(ERROR, getError(31), LOG_FAST);
+            return false;
+        }
+        int progressiveTime = time;
+        String[] interfaceBootSequence = {
+                "STABILIZE_PROTOCOL :: INITIALIZING KERNEL MODULE...",
+                "LINKING SIGNAL PROCESSOR... (WAIT)",
+                "[I/O] UNLOCKING MANUAL FREQUENCY KNOBS ...",
+                "INTERFACE READY. MOUNTING WINDOW..."
+        };
+        for (String bootMessages : interfaceBootSequence) {
+            system.getLogger().sysLog(INFO, bootMessages, progressiveTime);
+            progressiveTime += (int)(Math.random() * 11) + 20;
+        }
+        executionTimer = progressiveTime + 10;
         return true;
     }
 
