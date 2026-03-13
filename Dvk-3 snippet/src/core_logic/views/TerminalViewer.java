@@ -73,7 +73,7 @@ public class TerminalViewer {
 
         // DOC READER AQUI EM BAIXO
         if (system.getDocReader().isOpen()) {
-            docWindowView.draw(system, core, screen, tGraphics, animTick, size);
+            docWindowView.draw(system, screen, tGraphics, animTick, size);
         }
 
         screen.refresh();
