@@ -14,6 +14,8 @@ import core_logic.models.system.Dvk3System;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import static core_logic.models.utils.SignalVisualizer.getWaveForm;
+
 public class DocumentWindowViewer {
 
     TextColor amber = new TextColor.RGB(255, 176, 0);
@@ -89,7 +91,6 @@ public class DocumentWindowViewer {
             exit = df.format(data.getCurrentFrequency()) + "Hz";
             next = "[ENTER] CONFIRM";
             prev = "[ESC] CANCEL";
-            drawTuningControls(tGraphics, screenSize);
         }
 
         tGraphics.drawLine(startX, startY + h - 3, startX + w - 1, startY + h - 3, '═');
@@ -114,6 +115,12 @@ public class DocumentWindowViewer {
 
             tGraphics.putString(xBase, yScreen, line);
         }
+
+        if (data.isTuningMode()) {
+            drawTuningControls(tGraphics, screenSize);
+            drawSignalScope(tGraphics, startX, startY + h, w, data);
+        }
+
     }
 
     private void drawTuningControls(TextGraphics tGraphics, TerminalSize size) {
@@ -145,6 +152,32 @@ public class DocumentWindowViewer {
         tGraphics.putString(xBase, yBase + 3, l3);
 
         tGraphics.setForegroundColor(TextColor.ANSI.DEFAULT);
+    }
+
+    private void drawSignalScope(TextGraphics tGraphics, int x, int y, int width, Dvk3DocReader data) {
+
+        tGraphics.setForegroundColor(amber);
+        tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
+
+        int availableWidth = width - 4;
+        String waveForm = getWaveForm(data.getCurrentFrequency(), data.getIdealFrequency(), availableWidth);
+
+
+        tGraphics.drawLine(x, y, x + width - 1, y, '═');
+        tGraphics.drawLine(x, y + 2, x + width - 1, y + 2, '═');
+
+        tGraphics.setCharacter(x, y, '╒');
+        tGraphics.setCharacter(x + width - 1, y, '╕');
+        tGraphics.setCharacter(x, y + 1, '│');
+        tGraphics.setCharacter(x + width - 1, y + 1, '│');
+        tGraphics.setCharacter(x, y + 2, '└');
+        tGraphics.setCharacter(x + width - 1, y + 2, '┘');
+
+        String title = " SIGNAL INTERCEPT ";
+        tGraphics.putString(x + (width - title.length()) / 2, y, title);
+
+        // desenha a onda na linha do meio
+        tGraphics.putString(x + 2, y + 1, waveForm);
     }
 
     public void drawSafeDecryption() {

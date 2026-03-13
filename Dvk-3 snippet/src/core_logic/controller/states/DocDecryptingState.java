@@ -63,8 +63,7 @@ public class DocDecryptingState implements SystemState {
 
         if (key.getKeyType() == KeyType.Enter) {
             dvk3System.getCryptoUtils().safeConfirmMethod(dvk3System, fileName);
-            return;
+            controller.changeState(new TerminalState());
         }
-
     }
 }
