@@ -30,7 +30,11 @@ public class Dvk3DocReader {
 
     public void processTick() {
         if (open && openedFile != null && systemRef != null) {
-            if (openedFile.getEncryptionLayers().contains(CryptoUtils.EncryptionType.SAFE)) {
+
+            boolean hasSafeLayer = openedFile.getEncryptionLayers() != null &&
+                    openedFile.getEncryptionLayers().contains(CryptoUtils.EncryptionType.SAFE);
+            boolean outOfTune = openedFile.getCurrentFrequency() != openedFile.getIDEAL_FREQUENCY();
+            if (hasSafeLayer || outOfTune) {
                 String dynamicContent = systemRef.getCryptoUtils().encryptContent(openedFile);
                 wordWrap(dynamicContent, 51);
             }
