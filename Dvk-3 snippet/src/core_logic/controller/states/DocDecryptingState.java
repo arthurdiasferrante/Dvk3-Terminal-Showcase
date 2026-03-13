@@ -6,6 +6,9 @@ import com.googlecode.lanterna.screen.Screen;
 import core_logic.controller.GameController;
 import core_logic.models.system.Dvk3DocReader;
 import core_logic.models.system.Dvk3System;
+
+import java.util.IdentityHashMap;
+
 import static core_logic.models.rules.Dvk3Config.*;
 
 public class DocDecryptingState implements SystemState {
@@ -25,7 +28,15 @@ public class DocDecryptingState implements SystemState {
             idle = currentTime - docReader.getLastInteractionTime() > FINE_FREQUENCY_DELAY;
         }
 
-        if (key.getKeyType() == KeyType.ArrowLeft && idle) {
+        if (key.getKeyType() == KeyType.Escape) {
+            dvk3System.getDocReader().closeReadMode(dvk3System);
+            controller.changeState(new TerminalState());
+            return;
+        }
+
+        if (!idle) return;
+
+        if (key.getKeyType() == KeyType.ArrowLeft) {
             docReader.notifyInteractor(System.currentTimeMillis());
             if (key.isShiftDown()) {
                 keyWorked = dvk3System.getCryptoUtils().manualSafeTuning(dvk3System, fileName, false, false);
@@ -37,7 +48,7 @@ public class DocDecryptingState implements SystemState {
                 else docReader.setLastKeyInteracted("");
             }
         }
-        if (key.getKeyType() == KeyType.ArrowRight & idle) {
+        if (key.getKeyType() == KeyType.ArrowRight) {
             docReader.notifyInteractor(System.currentTimeMillis());
             if (key.isShiftDown()) {
                 keyWorked = dvk3System.getCryptoUtils().manualSafeTuning(dvk3System, fileName, false, true);
@@ -49,5 +60,11 @@ public class DocDecryptingState implements SystemState {
                 else docReader.setLastKeyInteracted("");
             }
         }
+
+        if (key.getKeyType() == KeyType.Enter) {
+            dvk3System.getCryptoUtils().safeConfirmMethod(dvk3System, fileName);
+            return;
+        }
+
     }
 }

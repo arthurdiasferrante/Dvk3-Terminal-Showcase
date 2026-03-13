@@ -89,6 +89,7 @@ public class DocumentWindowViewer {
             exit = df.format(data.getCurrentFrequency()) + "Hz";
             next = "[ENTER] CONFIRM";
             prev = "[ESC] CANCEL";
+            drawTuningControls(tGraphics, screenSize);
         }
 
         tGraphics.drawLine(startX, startY + h - 3, startX + w - 1, startY + h - 3, '═');
@@ -113,6 +114,37 @@ public class DocumentWindowViewer {
 
             tGraphics.putString(xBase, yScreen, line);
         }
+    }
+
+    private void drawTuningControls(TextGraphics tGraphics, TerminalSize size) {
+
+        String anchorHeader = " ▓▓▌ ";
+        String anchorBody = " ░░▌ ";
+
+        String titleText = " TUNING MODULE CONTROLS ";
+        String divider = "═════════════════════════════";
+        String line1Text = "▸ COARSE : [◄][►] ±1";
+        String line2Text = "▸ FINE : [⇧]+[◄][►] ±0.50";
+
+        String l0 = anchorHeader + titleText;
+        String l1 = anchorHeader + divider;
+        String l2 = anchorBody + line1Text;
+        String l3 = anchorBody + line2Text;
+
+        int maxWidth = Math.max(l0.length(), Math.max(l2.length(), l3.length()));
+
+        int xBase = size.getColumns() - maxWidth - 1;
+        int yBase = size.getRows() - 6;
+
+        tGraphics.setForegroundColor(amber);
+        tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
+
+        tGraphics.putString(xBase, yBase, l0);
+        tGraphics.putString(xBase, yBase + 1, l1);
+        tGraphics.putString(xBase, yBase + 2, l2);
+        tGraphics.putString(xBase, yBase + 3, l3);
+
+        tGraphics.setForegroundColor(TextColor.ANSI.DEFAULT);
     }
 
     public void drawSafeDecryption() {
