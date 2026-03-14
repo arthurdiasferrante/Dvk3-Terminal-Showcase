@@ -134,10 +134,6 @@ public class Dvk3SystemLogger {
         }
     }
 
-    public void releaseLock() {
-        isBusy = false;
-    }
-
     public static class LogEntry {
         private String message;
         private String prefix;

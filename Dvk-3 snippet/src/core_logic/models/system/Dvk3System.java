@@ -70,7 +70,6 @@ public class Dvk3System {
         for (String message : messages) {
             getLogger().sysLog(Dvk3SystemLogger.LogType.INFO, message, messageDelay, false);
             messageDelay += 20;
-            getLogger().releaseLock();
         }
     }
 
