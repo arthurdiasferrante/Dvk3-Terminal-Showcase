@@ -11,17 +11,13 @@ import core_logic.models.BunkerState;
 import static core_logic.models.rules.Dvk3Config.*;
 
 import core_logic.models.physical.Dvk3Core;
-import core_logic.models.system.Dvk3SystemLogger;
 import core_logic.views.BootSequence;
 import core_logic.views.DocumentWindowViewer;
-import core_logic.views.SafeHaltScreen;
 import core_logic.views.TerminalViewer;
 import core_logic.models.system.Dvk3System;
 
 import java.io.IOException;
-import java.security.Key;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class GameController {
     private long lastTickAnimation = System.currentTimeMillis();
@@ -69,7 +65,7 @@ public class GameController {
         flushInput();
 
         resetTimers();
-        dvk3System.welcomeMessages();
+        dvk3System.greetings();
 
         if (!dvk3System.getLogger().hasTyped()) {
             dvk3System.inputBuffer.append("Type HELP for useful commands!");

@@ -60,24 +60,30 @@ public class Dvk3DocReader {
     // algoritmo de quebra de linha para caber na janela do terminal
     private void wordWrap(String content, int maxWidth) {
         formattedLines.clear();
-        String[] words = content.split(" ");
-        StringBuilder currentLine = new StringBuilder();
+        content = content.replace("\r", "");
+        String[] paragraphs = content.split("\n");
 
-        for (String word : words) {
-            if (currentLine.length() + word.length() + 1 <= maxWidth) {
-                if (currentLine.length() > 0) {
-                    currentLine.append(" ");
-                }
-                currentLine.append(word);
+        for (String line : paragraphs) {
+            if (line.length() <= maxWidth) {
+                formattedLines.add(line);
             } else {
-                formattedLines.add(currentLine.toString());
-                currentLine = new StringBuilder(word);
+
+                while (line.length() > maxWidth) {
+                    String part = line.substring(0, maxWidth);
+                    int breakPoint = part.lastIndexOf(" ");
+                    if (breakPoint == -1) {
+                        formattedLines.add(part);
+                        line = line.substring(maxWidth);
+                    } else {
+                        formattedLines.add(line.substring(0, breakPoint));
+                        line = line.substring(breakPoint + 1);
+                    }
+                }
+                if (line.length() > 0) {
+                    formattedLines.add(line);
+                }
             }
         }
-        if (currentLine.length() > 0) {
-            formattedLines.add(currentLine.toString());
-        }
-
         totalLines = formattedLines.size();
     }
 

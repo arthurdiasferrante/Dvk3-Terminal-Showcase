@@ -56,7 +56,7 @@ public class Dvk3System {
         logger.processDisplayQueue(0);
     }
 
-    public void welcomeMessages() {
+    public void greetings() {
         int messageDelay = LOG_SLOW;
         String username = System.getProperty("user.name");
         String[] messages = {
@@ -70,6 +70,7 @@ public class Dvk3System {
         for (String message : messages) {
             getLogger().sysLog(Dvk3SystemLogger.LogType.INFO, message, messageDelay, false);
             messageDelay += 20;
+            getLogger().releaseLock();
         }
     }
 

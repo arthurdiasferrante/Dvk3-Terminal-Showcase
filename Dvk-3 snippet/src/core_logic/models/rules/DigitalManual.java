@@ -185,8 +185,8 @@ public class DigitalManual {
         String[] commonTypeMismatch = {
                 "TYPE MISMATCH. TARGET IS A DIRECTORY.",
                 "METHOD FAILED. TARGET IS NOT A FILE.",
-                "INVALID TARGET TYPE. USE \"DOSTUP\" INSTEAD.",
-                "TYPE MISMATCH. USE \"DOSTUP\" FOR DIRECTORIES.",
+                "INVALID TARGET TYPE. USE \"CD\" INSTEAD.",
+                "TYPE MISMATCH. USE \"CD\" FOR DIRECTORIES.",
                 "PROTOCOL VIOLATION. OBJECT IS A DIRECTORY."
         };
         return commonTypeMismatch[random.nextInt(commonTypeMismatch.length)];

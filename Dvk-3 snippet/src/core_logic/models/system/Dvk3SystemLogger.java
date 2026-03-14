@@ -132,10 +132,11 @@ public class Dvk3SystemLogger {
             this.message = message;
             this.delayTicks = delayTicks;
         }
-
-
     }
 
+    public void releaseLock() {
+        isBusy = false;
+    }
 
     public static class LogEntry {
         private String message;
