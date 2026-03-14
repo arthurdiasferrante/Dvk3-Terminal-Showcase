@@ -58,8 +58,10 @@ public class Dvk3System {
 
     public void welcomeMessages() {
         int messageDelay = LOG_SLOW;
+        String username = System.getProperty("user.name");
         String[] messages = {
                 "DVK-3 OS ONLINE.",
+                "Hello " + username + "!",
                 "Welcome to the interactive portfolio simulation.",
                 "Type [HELP] to begin navigation.",
                 "Made by Arthur Dias Ferrante",

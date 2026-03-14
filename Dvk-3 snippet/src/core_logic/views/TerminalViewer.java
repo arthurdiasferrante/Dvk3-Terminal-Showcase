@@ -121,7 +121,9 @@ public class TerminalViewer {
             isCursorVisible = (animTick / 5) % 2 == 0;
         }
 
-        String prompt = "[SN-0373@bunker ~]$ ";
+        String username = System.getProperty("user.name");
+//        String prompt = "[SN-0373@bunker ~]$ ";
+        String prompt = String.format("[SN-0373@%s ~]& ", username);
         String cursorChar = isCursorVisible ? "█" : " ";
         String promptTyping = dvk3System.inputBuffer.toString();
 
