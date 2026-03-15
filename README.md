@@ -56,7 +56,8 @@ The terminal window will open with the boot sequence; then you can type commands
 | `CD [DIR]`     | Enter a directory (use `CD ..` to go back) |
 | `ROOT` / `/`   | Go to the root directory |
 | `CAT [FILE]`   | Read a text file’s contents |
-| `DECRYPT ...`  | Decrypt/stabilize protected files (see `HELP` for syntax) |
+| `DECRYPT ...`  | Decrypt protected files (see `HELP` for syntax) |
+| `STABILIZE ...`| Stabilize protected files (see `HELP` for syntax) |
 | `CHECK [FILE]` | Check a file’s “frequency” (used with DECRYPT) |
 | `CLEAR`        | Clear the screen |
 | `HELP` / `?`   | List commands |
