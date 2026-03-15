@@ -24,7 +24,7 @@ public class TerminalState implements SystemState {
         if (key.getKeyType() == KeyType.Character) {
             if (!dvk3System.getLogger().hasTyped()) {
                 dvk3System.getLogger().triggerTyped();
-                dvk3System.inputBuffer.setLength(0);
+                dvk3System.getInputBuffer().setLength(0);
             }
 
             // essa é uma proteção contra ghosting (tecla repetida muito rápido)
@@ -37,8 +37,8 @@ public class TerminalState implements SystemState {
             char c = key.getCharacter();
             if (c >= 32 && c < 127) {
                 if (!Character.isISOControl(c)) {
-                    if (dvk3System.inputBuffer.length() < 50) {
-                        dvk3System.inputBuffer.append(key.getCharacter());
+                    if (dvk3System.getInputBuffer().length() < 50) {
+                        dvk3System.getInputBuffer().append(key.getCharacter());
                     }
                 }
             }
@@ -52,12 +52,12 @@ public class TerminalState implements SystemState {
             if (!dvk3System.getLogger().hasTyped()) {
                 return;
             }
-            if (!dvk3System.inputBuffer.isEmpty()) {
-                dvk3System.inputBuffer.deleteCharAt(dvk3System.inputBuffer.length() - 1);
+            if (!dvk3System.getInputBuffer().isEmpty()) {
+                dvk3System.getInputBuffer().deleteCharAt(dvk3System.getInputBuffer().length() - 1);
             }
         }
         else if (key.getKeyType() == KeyType.Enter) {
-            if (!dvk3System.getLogger().hasTyped() || dvk3System.inputBuffer.isEmpty()) {
+            if (!dvk3System.getLogger().hasTyped() || dvk3System.getInputBuffer().isEmpty()) {
                 return;
             }
             processNewCommands(dvk3System, controller);
@@ -75,10 +75,10 @@ public class TerminalState implements SystemState {
             } else {
                 controller.setCommandIndex(historySize);
             }
-            dvk3System.inputBuffer.setLength(0);
+            dvk3System.getInputBuffer().setLength(0);
             if (commandIndex != historySize) {
                 String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                dvk3System.inputBuffer.append(historyCommand);
+                dvk3System.getInputBuffer().append(historyCommand);
             }
         } else if (key.getKeyType() == KeyType.ArrowDown) {
             if (commandIndex < historySize) {
@@ -88,11 +88,11 @@ public class TerminalState implements SystemState {
                 controller.setCommandIndex(0);
             }
 
-            dvk3System.inputBuffer.setLength(0);
+            dvk3System.getInputBuffer().setLength(0);
 
             if (commandIndex != historySize) {
                 String historyCommand = dvk3System.getCommandHistoryMessage(commandIndex);
-                dvk3System.inputBuffer.append(historyCommand);
+                dvk3System.getInputBuffer().append(historyCommand);
             }
 
         } else {
@@ -105,13 +105,13 @@ public class TerminalState implements SystemState {
         Dvk3Core dvk3Core = controller.getDvk3Core();
         BunkerState bunkerState = controller.getBunkerState();
 
-        String finalCommand = dvk3System.inputBuffer.toString();
+        String finalCommand = dvk3System.getInputBuffer().toString();
         dvk3System.getLogger().userLog(finalCommand, dvk3System.getFormattedHour());
         dvk3System.addCommandToHistory(finalCommand);
         controller.setCommandIndex(dvk3System.getCommandHistoryMessageSize());
         Thread.sleep(50);
 
         processCommands.executeCommand(finalCommand, dvk3System, dvk3Core, bunkerState);
-        dvk3System.inputBuffer.setLength(0);
+        dvk3System.getInputBuffer().setLength(0);
     }
 }

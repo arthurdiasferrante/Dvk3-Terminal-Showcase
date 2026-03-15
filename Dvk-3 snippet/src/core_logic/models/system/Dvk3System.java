@@ -21,7 +21,7 @@ public class Dvk3System {
     private final CryptoUtils cryptoUtils = new CryptoUtils();
 
     // Buffer de Digitação
-    public StringBuilder inputBuffer = new StringBuilder();
+    private StringBuilder inputBuffer = new StringBuilder();
 
     // Histórico de Mensagens
     private List<String> commandHistory = new ArrayList<>();
@@ -172,6 +172,10 @@ public class Dvk3System {
         if (!isConfirmationMode()) {
             lastCommand = commandHistory.getLast();
         }
+    }
+
+    public StringBuilder getInputBuffer() {
+        return inputBuffer;
     }
 
     public boolean isSafeHalt() {

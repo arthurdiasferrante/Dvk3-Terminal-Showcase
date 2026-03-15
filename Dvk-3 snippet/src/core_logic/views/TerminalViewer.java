@@ -125,7 +125,7 @@ public class TerminalViewer {
 //        String prompt = "[SN-0373@bunker ~]$ ";
         String prompt = String.format("[SN-0373@%s ~]& ", username);
         String cursorChar = isCursorVisible ? "█" : " ";
-        String promptTyping = dvk3System.inputBuffer.toString();
+        String promptTyping = dvk3System.getInputBuffer().toString();
 
         if (!dvk3System.getLogger().hasTyped()) {
             dimPen.putString(2, yPrompt, prompt + promptTyping);

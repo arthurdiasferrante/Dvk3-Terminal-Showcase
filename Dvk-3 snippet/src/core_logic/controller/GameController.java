@@ -68,7 +68,7 @@ public class GameController {
         dvk3System.greetings();
 
         if (!dvk3System.getLogger().hasTyped()) {
-            dvk3System.inputBuffer.append("Type HELP for useful commands!");
+            dvk3System.getInputBuffer().append("Type HELP for useful commands!");
         }
         long lastTick = System.currentTimeMillis();
         long animTick = 0;
