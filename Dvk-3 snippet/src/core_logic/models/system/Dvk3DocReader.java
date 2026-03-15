@@ -64,6 +64,11 @@ public class Dvk3DocReader {
         String[] paragraphs = content.split("\n");
 
         for (String line : paragraphs) {
+
+            if (line.trim().equals("<HR>")) {
+                formattedLines.add("-".repeat(maxWidth));
+                continue;
+            }
             if (line.length() <= maxWidth) {
                 formattedLines.add(line);
             } else {
