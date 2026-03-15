@@ -80,7 +80,26 @@ public class Dvk3FileManager {
         // 4. SYS
         VirtualFolder sysFolder = new VirtualFolder(STANDART, "SYS", true, rootFolder);
         new VirtualFile(SYSTEM, "KERNEL", sysFolder, "BINARY DATA...");
-        new VirtualFile(EVENT_LOG, "BOOT", sysFolder, "System booted successfully at " + now.format(formatter) + ".");
+        String hostUser = System.getProperty("user.name");
+        String hostOS = System.getProperty("os.name");
+        String hostArch = System.getProperty("os.arch");
+        String javaVer = System.getProperty("java.version");
+        int cores = Runtime.getRuntime().availableProcessors();
+        String bootLogContent =
+                "DVK-3 KERNEL BOOT SEQUENCE COMPLETED\n" +
+                        "<HR>\n" +
+                        "[ OK ] Core logic modules loaded.\n" +
+                        "[ OK ] Virtual filesystem (/ROOT) mounted successfully.\n" +
+                        "[ OK ] Encrypted P2P channels established.\n" +
+                        "<HR>\n" +
+                        "HOST ENVIRONMENT DETECTED:\n" +
+                        "OPERATOR..: " + hostUser + "\n" +
+                        "OS........: " + hostOS + " (" + hostArch + ")\n" +
+                        "HARDWARE..: " + cores + " CPU Cores Available\n" +
+                        "RUNTIME...: Java Virtual Machine v." + javaVer + "\n" +
+                        "<HR>\n" +
+                        "System booted successfully at " + now.format(formatter) + ".\n";
+        new VirtualFile(EVENT_LOG, "BOOT", sysFolder, bootLogContent);
     }
 
     public void dostupMethod(String rawCommand, Dvk3System system) {

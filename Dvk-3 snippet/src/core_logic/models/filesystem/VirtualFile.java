@@ -53,6 +53,7 @@ public class VirtualFile {
         if (this.type == FileType.SYSTEM) fileName = rawName + ".SYS";
         else if (this.type == FileType.TEXT) fileName = rawName + ".TXT";
         else if (this.type == FileType.EXEC) fileName = rawName + ".EXE";
+        else if (this.type == FileType.EVENT_LOG) fileName = rawName + ".LOG";
         else if (this.type == FileType.TRASH) fileName = rawName + trashExtensions[random.nextInt(trashExtensions.length)];
         else this.fileName = rawName;
     }
