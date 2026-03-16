@@ -39,7 +39,7 @@ A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Д
 
 1. Clone the repo and open the `Dvk-3 snippet` folder as a Java project (e.g. in IntelliJ IDEA).
 2. Add the Lanterna library to the classpath (JAR or Maven/Gradle, depending on your setup).
-3. Run the main class: `core_logic.Main`.
+3. Run the main class: `main.java.core_logic.Main`.
 
 
 The terminal window will open with the boot sequence; then you can type commands.
