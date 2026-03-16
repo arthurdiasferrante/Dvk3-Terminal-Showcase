@@ -113,7 +113,6 @@ Dvk-3 snippet/
 © 2026 Arthur Dias Ferrante. All rights reserved.
 =======
 © 2026 Arthur Dias Ferrante. All rights reserved. 
->>>>>>> 18faa1a68dc3fd25f13ee5b9d609717ceba5315a
 Unauthorized distribution or reverse engineering of the DVK-3 kernel simulator logic is strictly prohibited.
 
 
