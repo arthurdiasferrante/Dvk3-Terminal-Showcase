@@ -4,8 +4,6 @@ A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Д
 
 =======
 
-A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Диалоговый Вычислительный Комплекс). Demo environment with a virtual file system, boot sequence, and file “decryption.”
-
 
 > **Note:** This is a creative reinterpretation inspired by the DVK-3. It is not an accurate hardware or software emulation.
 
@@ -65,19 +63,6 @@ The terminal window will open with the boot sequence; then you can type commands
 | `CLEAR`         | Clear the screen                                  |
 | `HELP` / `?`    | List commands                                     |
 | `SHUTDOWN`      | End the session                                   |
-=======
-| Command        | Description |
-|----------------|-------------|
-| `LS` / `DIR`   | List files and folders in the current directory |
-| `CD [DIR]`     | Enter a directory (use `CD ..` to go back) |
-| `ROOT` / `/`   | Go to the root directory |
-| `CAT [FILE]`   | Read a text file’s contents |
-| `DECRYPT ...`  | Decrypt protected files (see `HELP` for syntax) |
-| `STABILIZE ...`| Stabilize protected files (see `HELP` for syntax) |
-| `CHECK [FILE]` | Check a file’s “frequency” (used with DECRYPT) |
-| `CLEAR`        | Clear the screen |
-| `HELP` / `?`   | List commands |
-| `SHUTDOWN`     | End the session |
 
 
 **Tip:** Go to the `HOME` folder for contacts and projects; in `HOME/PRIVATE` there are files that require `DECRYPT`.
