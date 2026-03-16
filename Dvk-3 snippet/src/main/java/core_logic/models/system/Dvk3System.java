@@ -170,7 +170,7 @@ public class Dvk3System {
 
     public void setLastCommand() {
         if (!isConfirmationMode()) {
-            lastCommand = commandHistory.getLast();
+            lastCommand = commandHistory.get(commandHistory.size() - 1);
         }
     }
 

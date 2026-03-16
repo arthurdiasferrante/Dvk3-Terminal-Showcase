@@ -37,7 +37,7 @@ public class Dvk3FileManager {
 
     private String loadTextResource(String fileName) {
         try {
-            String path = "assets/data/" + fileName;
+            String path = "data/" + fileName;
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
             if (inputStream == null) {
                 return "ERROR: File content missing for " + fileName;

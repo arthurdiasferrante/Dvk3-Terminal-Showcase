@@ -1,0 +1,8 @@
+CONTACT INFO:
+<HR>
+Name:     Arthur Dias
+Github:   github.com/arthurdiasferrante
+Email:    arthurdiasferrante@gmail.com
+Linkedin: linkedin.com/in/arthur-dias-ferrante-102a042a8/
+<HR>
+Open to work: Java, Spring Boot, Backend, Legacy Systems, Cybersecurity.

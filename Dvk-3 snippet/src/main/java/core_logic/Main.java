@@ -16,7 +16,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory factory = new DefaultTerminalFactory();
 
-        Font customFont = loadCustomFont("assets/Glass_TTY_VT220.ttf", 23f);
+//        Font customFont = loadCustomFont("main/resources/Glass_TTY_VT220.ttf", 23f);
+        Font customFont = loadCustomFont("Glass_TTY_VT220.ttf", 23f);
 
         Font fontBackup = new Font("Monospaced", Font.PLAIN, 20);
 

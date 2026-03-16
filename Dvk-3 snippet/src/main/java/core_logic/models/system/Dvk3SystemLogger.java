@@ -57,7 +57,7 @@ public class Dvk3SystemLogger {
         messageHistory.add(new LogEntry(message, prefix, true));
 
         if (messageHistory.size() > MAX_HISTORY) {
-            messageHistory.removeFirst();
+            messageHistory.remove(0);
         }
     }
 
@@ -94,7 +94,7 @@ public class Dvk3SystemLogger {
 
         messageHistory.add(new LogEntry(message, prefix, isInstant));
         if (messageHistory.size() > MAX_HISTORY) {
-            messageHistory.removeFirst();
+            messageHistory.remove(0);
         }
     }
 
