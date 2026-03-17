@@ -19,7 +19,7 @@ public class SafeHaltScreen {
         tGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         tGraphics.setForegroundColor(amber);
 
-        String text1 = "It's now safe to turn off";
+        String text1 = "It is now safe to turn off";
         String text2 = "your computer.";
         String shutdownButton = "[ESC]";
         int centerRow = screenSize.getRows() / 2;

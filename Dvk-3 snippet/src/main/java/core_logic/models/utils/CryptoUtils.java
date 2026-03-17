@@ -22,8 +22,6 @@ public class CryptoUtils {
         HEX
     }
 
-
-
     public String encryptContent(VirtualFile file) {
         String currentText = file.getFileContent();
         if (file.getEncryptionLayers() == null) {
