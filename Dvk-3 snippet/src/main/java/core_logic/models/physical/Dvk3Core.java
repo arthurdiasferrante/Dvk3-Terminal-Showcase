@@ -17,6 +17,8 @@ public class Dvk3Core {
         this.currentTemperature = currentTemperature;
     }
 
+    // Essa parte do código não é tão bem aproveitada na versão snippet
+    // Possui uma função mais importante no código completo
     public void processTick(Dvk3System system, BunkerState state) {
         double ambientTemp = state.getBunkerTemperature();
 

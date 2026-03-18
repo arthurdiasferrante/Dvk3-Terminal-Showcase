@@ -35,7 +35,6 @@ public class Dvk3System {
     private int tick = 0;
 
 
-
     public void notifyTyping() {
         lastTypingTime = System.currentTimeMillis();
     }

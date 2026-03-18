@@ -23,6 +23,8 @@ public class ProcessCommands {
 
         system.setLastCommand();
 
+
+        // tem que pensar em uma logica melhor pra resolver isso aqui mas dps eu faço ne hahahahahahah
         if (system.isConfirmationMode()) {
             if (mainCommand.equals("Y")) {
                 cleanCommand = (system.getLastCommand()).toUpperCase() + " Y";

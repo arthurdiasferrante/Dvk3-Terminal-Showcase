@@ -164,7 +164,6 @@ public class GameController {
                     changeState(new DocReaderState());
                 }
             }
-
             currentState.handleInput(dvk3System, key, this, screen);
         }
     }

@@ -4,8 +4,6 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
-import core_logic.Main;
-import core_logic.models.system.Dvk3System;
 
 public class SafeHaltScreen {
 
