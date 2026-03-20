@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: core_logic.models.utils.CryptoUtilsTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in core_logic.models.utils.CryptoUtilsTest

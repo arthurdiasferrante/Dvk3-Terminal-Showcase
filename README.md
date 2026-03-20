@@ -24,6 +24,18 @@ A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Д
 ---
 
 
+## Screenshots
+Some interface snapshots from the simulator: PNG prints and a short GIF.
+
+See how the `STABIIZE` behaves in practice: 
+
+![Decryption GIF](docs/gifs/Decryption.gif)
+![Shutdown](docs/images/Shutdown.png)
+![Showcase](docs/images/Showcase.png)
+![Reader](docs/images/Reader.png)
+
+---
+
 ## Requirements
 
 
