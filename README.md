@@ -53,7 +53,7 @@ See how `STABILIZE` behaves in practice:
 
 1. Clone the repo and open a terminal in the project folder:
    ```bash
-   cd "DVK-3 snippet/Dvk-3 snippet"
+   cd "DVK-3 snippet"
    ```
 
 2. **Run the application:**
