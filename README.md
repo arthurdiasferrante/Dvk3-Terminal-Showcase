@@ -1,7 +1,7 @@
 # DVK-3 Bunker
 
 A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Диалоговый Вычислительный Комплекс). Demo environment with a virtual file system, boot sequence, and file decryption.
-========
+
 
 
 > **Note:** This is a creative reinterpretation inspired by the DVK-3. It is not an accurate hardware or software emulation.
