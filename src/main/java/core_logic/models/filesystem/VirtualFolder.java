@@ -43,8 +43,9 @@ public class VirtualFolder {
     }
 
     public VirtualFolder getFolderByName(String name) {
+        String formattedName = name.replace("\\", " ");
         for (VirtualFolder folder : foldersList) {
-            if (folder.getFolderName().equals(name)) {
+            if (folder.getFolderName().equals(formattedName)) {
                 return folder;
             }
         }
@@ -52,9 +53,10 @@ public class VirtualFolder {
     }
 
     public VirtualFile getFileByName(String name) {
-        String searchName = name.toUpperCase();
+        String formattedName = name.replace("\\", " ").toUpperCase();
+
         for (VirtualFile file : this.getFilesList()) {
-            if (file.getFileName().equals(searchName) || file.getFileName().startsWith(searchName + ".")) {
+            if (file.getFileName().equals(formattedName) || file.getFileName().startsWith(formattedName + ".")) {
                 return file;
             }
         }

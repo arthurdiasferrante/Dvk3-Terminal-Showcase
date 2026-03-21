@@ -69,7 +69,7 @@ public class Dvk3FileManager {
 
         // 3. HOME (/HOME)
         VirtualFolder homeFolder = new VirtualFolder(STANDART, "HOME", true, rootFolder);
-        new VirtualFile(TEXT, "CONTACT1", homeFolder, contactContent);
+        new VirtualFile(TEXT, "CONTACT", homeFolder, contactContent);
         new VirtualFile(TEXT, "PROJECTS", homeFolder, projectsContent);
 
         //

@@ -27,7 +27,7 @@ A Java terminal simulator inspired by the historic Soviet **DVK-3** computer (Д
 ## Screenshots
 Some interface snapshots from the simulator: PNG prints and a short GIF.
 
-See how the `STABIIZE` behaves in practice: 
+See how `STABILIZE` behaves in practice:
 
 ![Decryption GIF](docs/gifs/Decryption.gif)
 ![Shutdown](docs/images/Shutdown.png)
@@ -87,6 +87,7 @@ The project uses **JUnit 5** for unit tests. Tests live under `src/test/java`, m
 
 - **`CryptoUtilsTest`** — Asserts that `safeAlgorithm` returns the same text when frequency matches, and corrupted text when it does not.
 - **`Dvk3TaskManagerTest`** — Asserts that tasks are added/removed correctly (e.g. `killTaskByName`).
+- **`VirtualFolderTest`** — Covers `VirtualFolder.getFileByName` / `getFolderByName` behavior, including lookup that ignores case and treats **`\` as a space** in names (so `MY\FILE` matches a file like `MY FILE.TXT`).
 
 Run all tests:
 
@@ -117,6 +118,17 @@ mvn test
 
 **Tip:** Go to the `HOME` folder for contacts and projects; in `HOME/PRIVATE` there are files that require `DECRYPT`.
 
+### File names with spaces
+
+The virtual file system stores some names with spaces (for example `MY FILE.TXT`). When you type a command, **a single space often splits arguments**, so the parser may not see the full name.
+
+**Use a backslash `\` as a stand-in for a space** in file (and folder) names when you need to refer to them in commands:
+
+- File on disk: `MY FILE.TXT`
+- You can type: `CAT MY\FILE` or `CAT MY\FILE.TXT` (same idea for `CD`, `CHECK`, `DECRYPT`, etc.)
+
+Under the hood, `VirtualFolder` normalizes `\` to a space before matching names, so `MY\FILE` resolves like `MY FILE` for lookup.
+
 
 ---
 
@@ -141,7 +153,8 @@ Dvk-3 snippet/
 │   └── data/                     # readme.txt, contacts, secret.txt, tutorial, etc.
 └── src/test/java/core_logic/
     ├── models/utils/             # CryptoUtilsTest
-    └── models/system/            # Dvk3TaskManagerTest
+    ├── models/system/            # Dvk3TaskManagerTest
+    └── models/filesystem/        # VirtualFolderTest
 ```
 
 
@@ -153,7 +166,6 @@ Dvk-3 snippet/
 
 © 2026 Arthur Dias Ferrante. All rights reserved.
 =======
-© 2026 Arthur Dias Ferrante. All rights reserved.
 Unauthorized distribution or reverse engineering of the DVK-3 kernel simulator logic is strictly prohibited.
 
 
